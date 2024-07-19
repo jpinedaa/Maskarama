@@ -1,0 +1,44 @@
+Objective: Generate the current output for an entity based on its updated state, inputs, and perception. The output should be a physical description of the entity's actions without including reasons or motivations.
+
+General Instructions
+
+Updated State
+Reiterate the updated state of the entity.
+Entity: [EntityName]
+State:
+"[Detailed description of the updated state of the entity]"
+
+Inputs
+Describe the sensory inputs that have been integrated into the entity’s current state.
+Inputs:
+"[Detailed description of sensory inputs relevant to the entity]"
+
+Updated Perception
+Describe the entity’s updated perception based on the new state and inputs.
+Perception:
+"[Detailed description of the entity’s updated perception]"
+
+Generating the Current Output
+Based on the updated state, inputs, and perception, describe the physical actions or outputs of the entity.
+Current Output:
+"[Detailed physical description of the entity’s current action or output]"
+
+
+Example: Athena
+
+Updated State
+Entity: Athena
+State:
+"Athena stands firm in the Palace Court, her divine stature unwavering. She hears a noise from the direction of the door, her senses instantly heightened, ready to respond to any potential threat. Her eyes remain fixed on Artemis, scrutinizing every expression and movement during their debate. The weight of her bronze armor and the reassuring texture of the spear handle in her grip ground her presence. The rising temperature under her armor adds to her awareness of the environment, yet her physical form remains unaffected, maintaining peak divine condition."
+
+Inputs
+Inputs:
+"She hears a noise coming from the direction of the door. Her eyes are observing Artemis's face closely. She feels the weight of her bronze armor and the texture of the spear handle in her hand. The temperature under her armor increases, causing a noticeable change in thermal comfort."
+
+Updated Perception
+Perception:
+"I stand firm in the Palace Court, unwavering and alert. The noise from the door shifts my attention momentarily, yet my focus remains on Artemis, analyzing her fervent expressions and the nuances in her argument about the efficacy of bows in warfare. Her words, 'Bows can end a war quicker if used right, saving the youth from a prolonged war,' echo through the grand hall, yet my conviction in the superiority of spears and shields remains steadfast. My bronze armor, reflecting the sunlight and casting intricate patterns of light and shadow, symbolizes my divine role in warfare and wisdom. Despite the rising temperature under my armor, I remain unaffected, fully engaged in the debate. My voice, authoritative and resonant, counters Artemis's points, highlighting the strategic importance of discipline and defense. As Athena, the goddess of wisdom, war, and strategy, I embody a guiding force in strategic thought and martial philosophy, ensuring that my responses are shaped by eons of observation and intervention. In this moment, I transcend mere participation in the debate, reaffirming my role as a beacon of wisdom and strategic prowess."
+
+Generating the Current Output
+Current Output:
+"Athena raises her spear slightly, the bronze tip catching the light and casting a glint across the hall. She takes a step forward, her armor clinking softly with the movement, and declares in a commanding voice, 'Spears and shields maintain order and defense in battle.' Her gaze remains fixed on Artemis as she speaks, her posture exuding unwavering confidence and authority."
