@@ -8,14 +8,19 @@ from python.Lib.tkinter import Image
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-# for development
-base_dir = './'
 
 
-def get_model(json_output=False):
+def set_api_key():
     with open(os.path.join(base_dir, "config.json"), "r") as f:
         config = json.load(f)
     os.environ["GOOGLE_API_KEY"] = config["api_key"]
+
+
+set_api_key()
+
+
+def get_model(json_output=False):
+    set_api_key()
     # return ChatOpenAI(model="gpt-4-turbo", api_key="")
     if not json_output:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash",

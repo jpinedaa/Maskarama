@@ -4,7 +4,7 @@ import os
 from agents import create_agent, AgentState
 from nodes import update_entity_node, output_json_node
 from utils import base_dir, get_json_schema_prompt, get_model, build_graph
-from memory import MEMORY_MAP
+from memory import MEMORY_MAP, load_graph, query_prompt
 
 
 llm = get_model()
@@ -60,8 +60,8 @@ class Entity:
         self.perception_update_graph = build_update_graph("perception_update.txt", {"updated_perception": "str"})
         self.currentOutput_graph = build_update_graph("currentOutput.txt", {"currentOutput": "str"})
 
-        if self.perception:
-            self.memory = MEMORY_MAP[self.name]
+        if self.perception and self.name in MEMORY_MAP:
+            self.memory = load_graph(MEMORY_MAP[self.name])
 
     def update(self):
         self.update_state()
@@ -74,10 +74,12 @@ class Entity:
         self.state = output["updated_state"]
 
     def update_character(self):
-        self.update_perception()
+        query = query_prompt.replace("PERCEPTION", self.perception)
+        memory = self.memory[1].query(query)
+        self.update_perception(memory)
 
-    def update_perception(self):
-        output = run_update_module(self.perception_update_graph, f"Perception: {self.perception}\nState: {self.state}\n", "Update Perception")
+    def update_perception(self, memory):
+        output = run_update_module(self.perception_update_graph, f"Perception: {self.perception}\nState: {self.state}\nInputs: {self.inputs}\nMemory: {memory}\n", "Update Perception")
         self.perception = output["updated_perception"]
 
     def generate_current_output(self):
@@ -127,7 +129,7 @@ class Environment:
         self.entity_update_graph = build_update_graph("entity_update.txt", {"entity1_name": "str", "entity2_name": "str", "entityN_name": "str"})
         self.generate_currentoutput_graph = build_update_graph("currentOutput.txt", {"entity1_name": "str", "entity2_name": "str", "entityN_name": "str"})
 
-    def run_simulation(self):
+    def run_simulation(self, no_turns):
         while True:
             self.update()
             self.generate_narrative()
@@ -137,6 +139,10 @@ class Environment:
             print("Turn Ended")
             print(
                 "--------------------------------------------------------------------")
+            if no_turns > 0:
+                no_turns -= 1
+                if no_turns == 0:
+                    break
 
     def update(self):
         #for entity in self.entities:
@@ -207,10 +213,9 @@ if __name__ == "__main__":
         example_state["OverallState"] = example["environment"]["state"]["OverallState"]
         example_env = Environment(example["environment"]["boundaries"], example_state, entities, entities[0])
         if loop:
-            example_env.run_simulation()
+            example_env.run_simulation(-1)
         else:
-            example_env.update()
-            example_env.generate_narrative()
+            example_env.run_simulation(1)
 
     except Exception as e:
         input(f"An error occurred: {e}")
