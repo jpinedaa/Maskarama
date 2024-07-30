@@ -1,0 +1,36 @@
+{
+  "palaceCourt01": {
+    "name": "Palace Court",
+    "entities": ["athena01", "artemis01", "statue01", "table01"],
+    "boundaries": [{
+      "ConnectedEnvironmentID": "throneRoom01",
+      "TransitionCondition": "Through the grand archway"
+    }],
+    "state": {
+      "OverallState": "The expansive room features high gilded marble columns rising to a frescoed ceiling, with sunlight streaming through tall, arched windows and casting intricate patterns on the polished marble floor. The mixed aromas of fresh grapes and fermented wine permeate the air, underscoring the opulence of the setting.",
+      "EntitySpecificStates": {
+        "athena01": "Athena, clad in detailed bronze armor with a plumed helmet, her sharp gray eyes and brown hair styled into a bun, stands assertively in the center of the room. She gestures towards a marble statue with her right hand while holding a bronze spear in her left, her voice echoing as she argues, 'While bows offer distance, they lack the defensive utility and discipline brought by spears and shields.' Her feet are firmly planted apart, commanding attention towards Artemis, with the statue to her right and a table with grapes and wine to her left.",
+        "artemis01": "Facing Athena directly, Artemis, in a leaf-patterned green tunic and loose light brown hair, counters with passion. Her green eyes intense, she holds an arrow in her left hand and gestures towards the horizon through the window with her right. Her shadow casts dramatically against the marble columns as she states, 'But consider the swiftness and reach of a well-aimed arrow, which can decide the outcome from afar, preserving lives.' The sunlight illuminates her figure, enhancing her fervor.",
+        "statue01": "An eight-foot tall white marble statue of a hunter, poised with a bow drawn and ready to release an arrow, adds a sense of impending action. Positioned to the right of Athena and in line with the main window, the statue's detailed curly hair, intense eyes, and focused expression make it a central visual point in the debate, casting a long shadow across the floor.",
+        "table01": "Behind Athena, to her left, a dark wood table carved with vine patterns holds a bronze bowl of dark purple grapes and a detailed amphora of red wine painted with war scenes. The table, while slightly outside the immediate debate area, subtly enhances the luxurious ambiance with its contents reflecting the ceremonial purpose of the room."
+      }
+    }
+  },
+  "hallsOfJudgment01": {
+    "name": "The Halls of Judgment",
+    "entities": ["zeus01", "hermes01", "judgmentTable01", "throneOfZeus01"],
+    "boundaries": [{
+      "ConnectedEnvironmentID": "palaceCourt01",
+      "TransitionCondition": "Through the grand double doors"
+    }],
+    "state": {
+      "OverallState": "The vast hall, adorned with columns of pure white marble, has an air of solemnity and authority. The high ceiling is adorned with murals depicting divine judgments and decrees. A soft, golden light fills the space from an unseen source, highlighting the grandiosity of the hall. The floor is a polished expanse of white marble, with intricate golden inlays tracing the patterns of ancient laws and edicts.",
+      "EntitySpecificStates": {
+        "zeus01": "Zeus sits at the head of the hall on a grand throne of pure gold, his presence dominating the space. Clad in a flowing white robe, his form radiates power and authority. His piercing blue eyes survey the hall with a mix of sternness and wisdom. A golden lightning bolt, a symbol of his power, rests beside him. His long, white hair and beard add to his majestic appearance, and his expression is thoughtful as he considers a recent judgment.",
+        "hermes01": "Hermes stands by the judgment table, ready to relay Zeus's decisions. Dressed in a light, sleeveless tunic and sandals, he appears relaxed yet alert. His winged helmet and sandals signify his role as the messenger. His slender, agile frame exudes a readiness for swift action, and his quick, perceptive eyes dart around the hall, taking in every detail. He holds a caduceus, a staff intertwined with two serpents, in his right hand. He starts moving toward the grand double doors, ready to deliver the latest judgment.",
+        "judgmentTable01": "A large, rectangular table made of polished black marble sits in the center of the hall. Its surface is bare except for a few scrolls and a golden quill, used by Zeus to record judgments. The table's sleek design contrasts with the ornate surroundings, emphasizing the seriousness of the proceedings. The black marble absorbs the soft, golden light, giving it a somber, almost ominous presence.",
+        "throneOfZeus01": "The throne of Zeus is a magnificent seat made of solid gold, intricately carved with symbols of power and authority. It stands elevated on a small dais, making Zeus's presence even more commanding. The throne is adorned with soft, white cushions, and a golden eagle emblem is prominently displayed at the top. The armrests are shaped like lion heads, symbolizing strength and majesty."
+      }
+    }
+  }
+}

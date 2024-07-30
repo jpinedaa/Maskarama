@@ -15,6 +15,7 @@ MEMORY_MAP = {
     'athena01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7687'),
     'artemis01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7686'),
 }
+query_engine = None
 with open(os.path.join(base_dir, "prompts/memory_query.txt"), "r",
           encoding='utf-8') as f:
     query_prompt = f.read()

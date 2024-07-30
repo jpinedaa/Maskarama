@@ -24,9 +24,9 @@ Boundaries:
   TransitionCondition: "[Condition]"
 
 Previous Exit Entities
-List the entities that exited in the previous state, meaning they should not appear in the current entity-specific states.
+List the entities that exited in the previous state with the boundary through which they exited from, meaning they should not appear in the current entity-specific states.
 Exit Entities:
-- Entity: [EntityName3]
+- Entity: {EntityName3: BoundaryName2}
 
 New Current Outputs of Entities
 Describe the new current outputs of the entities based on their updated states and perceptions.

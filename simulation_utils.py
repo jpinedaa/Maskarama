@@ -1,35 +1,13 @@
-import functools
 import json
 import os
-from agents import create_agent, AgentState
-from nodes import update_entity_node, output_json_node
-from utils import base_dir, get_json_schema_prompt, get_model, build_graph
+from agents import AgentState
+from utils import base_dir
+import memory as mem
 from memory import MEMORY_MAP, load_graph, query_prompt
-
-
-llm = get_model()
-llm_json = get_model(json_output=True)
-
-
-def build_update_graph(prompt_file, schema_dict):
-    with open(os.path.join(base_dir, f"prompts/{prompt_file}"), "r", encoding='utf-8') as f:
-        update_prompt = f.read()
-
-    json_schema_prompt = get_json_schema_prompt(schema_dict)
-
-    agent = create_agent(llm, update_prompt)
-    node = functools.partial(update_entity_node, agent=agent)
-
-    json_agent = create_agent(llm_json, json_schema_prompt)
-    json_node = functools.partial(output_json_node, agent=json_agent)
-
-    nodes = [("Update", node), ("Output", json_node)]
-    edges = [("Update", lambda s: "continue", {"continue": "Output"}),
-             ("Output", lambda s: "continue", {"continue": "__end__"})]
-    state_class = AgentState
-    entry_point = "Update"
-    graph = build_graph(state_class, nodes, edges, entry_point)
-    return graph
+from graphs import (entity_update_graph, perception_update_graph, currentOutput_graph,
+                    environment_update_graph, entities_update_graph,
+                    generate_currentoutput_graph, inputs_update_graph,
+                    narrative_generation_graph)
 
 
 def run_update_module(graph, input_msg, name):
@@ -56,12 +34,6 @@ class Entity:
         self.currentOutput = currentOutput
         self.name = name
         self.perception = perception
-        self.entity_update_graph = build_update_graph("entity_update.txt", {"updated_state": "str"})
-        self.perception_update_graph = build_update_graph("perception_update.txt", {"updated_perception": "str"})
-        self.currentOutput_graph = build_update_graph("currentOutput.txt", {"currentOutput": "str"})
-
-        if self.perception and self.name in MEMORY_MAP:
-            self.memory = load_graph(MEMORY_MAP[self.name])
 
     def update(self):
         self.update_state()
@@ -70,76 +42,66 @@ class Entity:
         self.generate_current_output()
 
     def update_state(self):
-        output = run_update_module(self.entity_update_graph, f"State: {self.state}\nInputs: {self.inputs}\n", "Update Entity State")
+        output = run_update_module(entity_update_graph, f"State: {self.state}\nInputs: {self.inputs}\n", "Update Entity State")
         self.state = output["updated_state"]
 
     def update_character(self):
         query = query_prompt.replace("PERCEPTION", self.perception)
-        memory = self.memory[1].query(query)
+
+        memory = None
+        if self.name in MEMORY_MAP:
+            if mem.query_engine is None:
+                mem.query_engine = load_graph(MEMORY_MAP[self.name])[1]
+            memory = mem.query_engine.query(query)
         self.update_perception(memory)
 
     def update_perception(self, memory):
-        output = run_update_module(self.perception_update_graph, f"Perception: {self.perception}\nState: {self.state}\nInputs: {self.inputs}\nMemory: {memory}\n", "Update Perception")
+        output = run_update_module(perception_update_graph, f"Perception: {self.perception}\nState: {self.state}\nInputs: {self.inputs}\nMemory: {memory}\n", "Update Perception")
         self.perception = output["updated_perception"]
 
     def generate_current_output(self):
         input_msg = f"State: {self.state}\nInputs: {self.inputs}\n"
         if self.perception:
             input_msg += f"Percetion: {self.perception}\n"
-        output = run_update_module(self.currentOutput_graph, input_msg, "Generate Current Output")
+        output = run_update_module(currentOutput_graph, input_msg, "Generate Current Output")
         self.currentOutput = output["currentOutput"]
 
 
 class Environment:
-    def __init__(self, boundaries, state, entities, perspective):
+    def __init__(self, boundaries, state, entities, name):
         self.boundaries = boundaries
         self.state = state
         self.entities = entities
-        self.perspective = perspective
+        self.name = name
         self.narrative = ""
-        self.exit_entities = []
-        self.environment_update_graph = build_update_graph("environment_update.txt",
-                                                {
-                                                            "boundaries": [
-                                                                {
-                                                                    "ConnectedEnvironmentID": "str",
-                                                                    "TransitionCondition": "str"
-                                                                },
-                                                                {
-                                                                    "ConnectedEnvironmentID": "str",
-                                                                    "TransitionCondition": "str"
-                                                                },
-                                                                {
-                                                                    "ConnectedEnvironmentID": "str",
-                                                                    "TransitionCondition": "str"
-                                                                }
-                                                            ],
-                                                            "state": {
-                                                                "OverallState": "str",
-                                                                "EntitySpecificStates": {
-                                                                    "entity1_name": "str",
-                                                                    "entity2_name": "str",
-                                                                    "entityN_name": "str"
-                                                                }
-                                                            },
-                                                            "exit_entities": ["entity1_name", "entity2_name", "entityN_name"]
-                                                            })
-        self.narrative_generation_graph = build_update_graph("narrative_generation.txt", {"narrative": "str"})
-        self.inputs_update_graph = build_update_graph("inputs_update.txt", {"entity1_name": "str", "entity2_name": "str", "entityN_name": "str"})
-        self.entity_update_graph = build_update_graph("entity_update.txt", {"entity1_name": "str", "entity2_name": "str", "entityN_name": "str"})
-        self.generate_currentoutput_graph = build_update_graph("currentOutput.txt", {"entity1_name": "str", "entity2_name": "str", "entityN_name": "str"})
+        self.exit_entities = {}
 
-    def run_simulation(self, no_turns):
+    def run_simulation(self, no_turns=None, shared_dict=None):
         while True:
             self.update()
-            self.generate_narrative()
+            if shared_dict['perspective'] in self.entities:
+                shared_dict['currentEnvironment'] = self.name
+                self.generate_narrative(shared_dict['perspective'])
             self.update_entity_inputs()
+            if shared_dict:
+                coming_entities = shared_dict.get(self.name)
+                if coming_entities:
+                    for entity in coming_entities:
+                        if entity not in self.entities.values():
+                            self.entities[entity.name] = entity
+                if len(self.exit_entities) > 0:
+                    for exiting_entity in self.exit_entities:
+                        if exiting_entity.name in self.entities:
+                            shared_dict[
+                                self.exit_entities[exiting_entity]].append(self.entities[exiting_entity.name])
+                            self.entities.remove(exiting_entity.name)
+                            break
             print(
                 "--------------------------------------------------------------------")
             print("Turn Ended")
             print(
                 "--------------------------------------------------------------------")
-            if no_turns > 0:
+            if no_turns:
                 no_turns -= 1
                 if no_turns == 0:
                     break
@@ -148,47 +110,47 @@ class Environment:
         #for entity in self.entities:
         #    entity.update()
         self.update_all_entities_states()
-        for entity in self.entities:
+        for entity_name, entity in self.entities.items():
             if entity.perception:
                 entity.update_character()
         self.update_all_entities_currentOutputs()
         self.update_state()
 
     def update_all_entities_states(self):
-        input_msg = {entity.name: {"state": entity.state, "inputs": entity.inputs} for entity in self.entities}
-        output = run_update_module(self.entity_update_graph, f"Entities: {input_msg}", "Update All Entities States")
-        for entity in self.entities:
-            entity.state = output[entity.name]
+        input_msg = {entity_name: {"state": entity.state, "inputs": entity.inputs} for entity_name, entity in self.entities.items()}
+        output = run_update_module(entities_update_graph, f"Entities: {input_msg}", "Update All Entities States")
+        for entity_name, entity in self.entities.items():
+            entity.state = output[entity_name]
 
     def update_all_entities_currentOutputs(self):
         input_msg = {}
-        for entity in self.entities:
-            input_msg[entity.name] = {"state": entity.state, "inputs": entity.inputs}
+        for entity_name, entity in self.entities.items():
+            input_msg[entity_name] = {"state": entity.state, "inputs": entity.inputs}
             if entity.perception:
-                input_msg[entity.name]["perception"] = entity.perception
-        output = run_update_module(self.generate_currentoutput_graph, f"Entities: {input_msg}", "Update All Entities Current Outputs")
-        for entity in self.entities:
-            entity.currentOutput = output[entity.name]
+                input_msg[entity_name]["perception"] = entity.perception
+        output = run_update_module(generate_currentoutput_graph, f"Entities: {input_msg}", "Update All Entities Current Outputs")
+        for entity_name, entity in self.entities.items():
+            entity.currentOutput = output[entity_name]
 
     def update_state(self):
         input_msg = (f"Boudaries: {self.boundaries}\nState: {self.state}\nExit Entities: {self.exit_entities}\n" +
-                     f"Entities current outputs: {[f'{entity.name}: {entity.currentOutput}' for entity in self.entities]}\n")
-        output = run_update_module(self.environment_update_graph, input_msg, "Update Environment State")
+                     f"Entities current outputs: {[f'{entity_name}: {entity.currentOutput}' for entity_name, entity in self.entities.items()]}\n")
+        output = run_update_module(environment_update_graph, input_msg, "Update Environment State")
         if len(self.exit_entities) > 0:
-            self.entities = [entity for entity in self.entities if entity.name not in self.exit_entities]
+            self.entities = {entity_name: entity for entity_name, entity in self.entities.items() if entity_name not in self.exit_entities}
         self.state = output["state"]
         self.boundaries = output["boundaries"]
         self.exit_entities = output["exit_entities"]
 
     def update_entity_inputs(self):
         input_msg = f"State: {self.state}\nBoundaries: {self.boundaries}\n"
-        output = run_update_module(self.inputs_update_graph, input_msg, "Update Entity Inputs")
-        for entity in self.entities:
-            entity.inputs = output[entity.name]
+        output = run_update_module(inputs_update_graph, input_msg, "Update Entity Inputs")
+        for entity_name, entity in self.entities.items():
+            entity.inputs = output[entity_name]
 
-    def generate_narrative(self):
-        output = run_update_module(self.narrative_generation_graph, f"State: {self.state}\nPerception: "
-                                                                    f"{self.perspective.name}- {self.perspective.perception}\n"
+    def generate_narrative(self, perspective):
+        output = run_update_module(narrative_generation_graph, f"State: {self.state}\nPerception: "
+                                                                    f"{perspective}- {self.entities[perspective].perception}\n"
                                                                     f"Previous Narrative: {self.narrative}\n", "Generate Narrative")
         self.narrative += output["narrative"]
 
@@ -205,15 +167,15 @@ if __name__ == "__main__":
         with open(os.path.join(base_dir, "example_environment.json"), "r", encoding='utf-8') as f:
             example = json.load(f)
         example_state = {}
-        entities = []
+        entities = {}
         for entity in example["entities"]:
             ent = Entity(example["entities"][entity]["state"], example["entities"][entity]["new_inputs"], '', entity, example["entities"][entity].get("perception", None))
             example_state[ent.name] = example["environment"]["state"]["EntitySpecificStates"][entity]
-            entities.append(ent)
+            entities[entity] = ent
         example_state["OverallState"] = example["environment"]["state"]["OverallState"]
-        example_env = Environment(example["environment"]["boundaries"], example_state, entities, entities[0])
+        example_env = Environment(example["environment"]["boundaries"], example_state, entities, example["environment"]["name"])
         if loop:
-            example_env.run_simulation(-1)
+            example_env.run_simulation(None)
         else:
             example_env.run_simulation(1)
 
