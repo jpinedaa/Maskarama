@@ -40,8 +40,9 @@ def output_json_node(state, agent):
         except Exception as e:
             print(f'Error trying to parse output, Error: {e}, Output: {result.content}, retrying')
             # update agent state with error message and try again
-            temp_state['messages'].append(AIMessage(content=result.content))
-            temp_state['messages'].append(HumanMessage(content=f'Error trying to parse json output, please try again,  error: {e}'))
+            # TODO- test if better too retry without appending the error message
+            #temp_state['messages'].append(AIMessage(content=result.content))
+            #temp_state['messages'].append(HumanMessage(content=f'Error trying to parse json output, please try again,  error: {e}'))
             continue
 
     print("JSON Output: ", json.dumps(output, indent=4))
