@@ -38,7 +38,8 @@ class Simulation:
             for proc in env_processes:
                 proc.join()
 
-            self.currentEnvironment = shared_dict['currentEnvironment']
+            if 'currentEnvironment' in shared_dict:
+                self.currentEnvironment = shared_dict['currentEnvironment']
 
 
 if __name__ == '__main__':

@@ -78,9 +78,12 @@ class Environment:
 
     def run_simulation(self, no_turns=None, shared_dict=None):
         while True:
-            self.update()
             if shared_dict['perspective'] in self.entities:
                 shared_dict['currentEnvironment'] = self.name
+            if no_turns is not None and int(no_turns) <= 0:
+                break
+            self.update()
+            if shared_dict['perspective'] in self.entities:
                 self.generate_narrative(shared_dict['perspective'])
             self.update_entity_inputs()
             if shared_dict:
@@ -91,20 +94,18 @@ class Environment:
                             self.entities[entity.name] = entity
                 if len(self.exit_entities) > 0:
                     for exiting_entity in self.exit_entities:
-                        if exiting_entity.name in self.entities:
-                            shared_dict[
-                                self.exit_entities[exiting_entity]].append(self.entities[exiting_entity.name])
-                            self.entities.remove(exiting_entity.name)
+                        if exiting_entity in self.entities:
+                            shared_dict[self.exit_entities[exiting_entity]].append(self.entities[exiting_entity])
+                            self.entities.remove(exiting_entity)
                             break
             print(
                 "--------------------------------------------------------------------")
             print("Turn Ended")
             print(
                 "--------------------------------------------------------------------")
-            if no_turns:
+            if no_turns is not None:
                 no_turns -= 1
-                if no_turns == 0:
-                    break
+
 
     def update(self):
         #for entity in self.entities:
