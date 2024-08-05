@@ -23,3 +23,8 @@ def create_agent(llm, system_message: str):
 class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], operator.add]
     output: dict
+
+class InputAgentState(TypedDict):
+    messages: Annotated[Sequence[BaseMessage], operator.add]
+    output: dict
+    approved: bool

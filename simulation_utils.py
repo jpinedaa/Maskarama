@@ -1,17 +1,19 @@
 import json
 import os
-from agents import AgentState
+from agents import AgentState, InputAgentState
 from utils import base_dir
 import memory as mem
 from memory import MEMORY_MAP, load_graph, query_prompt
 from graphs import (entity_update_graph, perception_update_graph, currentOutput_graph,
                     environment_update_graph, entities_update_graph,
                     generate_currentoutput_graph, inputs_update_graph,
-                    narrative_generation_graph)
+                    narrative_generation_graph, get_user_input_graph)
 
 
-def run_update_module(graph, input_msg, name):
-    initial_state = AgentState()
+def run_update_module(graph, input_msg, name, agent_class=None):
+    if agent_class is None:
+        agent_class = AgentState
+    initial_state = agent_class()
     initial_state["messages"] = [input_msg]
 
     events = graph.stream(initial_state, {"recursion_limit": 15})
@@ -133,15 +135,18 @@ class Environment:
         for entity_name, entity in self.entities.items():
             entity.currentOutput = output[entity_name]
 
-    def update_state(self):
-        input_msg = (f"Boudaries: {self.boundaries}\nState: {self.state}\nExit Entities: {self.exit_entities}\n" +
-                     f"Entities current outputs: {[f'{entity_name}: {entity.currentOutput}' for entity_name, entity in self.entities.items()]}\n")
-        output = run_update_module(environment_update_graph, input_msg, "Update Environment State")
+    def set_environment_fields(self, output):
         if len(self.exit_entities) > 0:
             self.entities = {entity_name: entity for entity_name, entity in self.entities.items() if entity_name not in self.exit_entities}
         self.state = output["state"]
         self.boundaries = output["boundaries"]
         self.exit_entities = output["exit_entities"]
+
+    def update_state(self):
+        input_msg = (f"Boudaries: {self.boundaries}\nState: {self.state}\nExit Entities: {self.exit_entities}\n" +
+                     f"Entities current outputs: {[f'{entity_name}: {entity.currentOutput}' for entity_name, entity in self.entities.items()]}\n")
+        output = run_update_module(environment_update_graph, input_msg, "Update Environment State")
+        self.set_environment_fields(output)
 
     def update_entity_inputs(self):
         input_msg = f"State: {self.state}\nBoundaries: {self.boundaries}\n"
@@ -154,6 +159,17 @@ class Environment:
                                                                     f"{perspective}- {self.entities[perspective].perception}\n"
                                                                     f"Previous Narrative: {self.narrative}\n", "Generate Narrative")
         self.narrative += output["narrative"]
+
+    def process_user_input(self, user_input):
+        input_msg = ""
+        output = run_update_module(get_user_input_graph, input_msg, "Get User Input", InputAgentState)
+        return_dict = {}
+        if "environment" in output:
+            self.set_environment_fields(output["environment"])
+            return_dict["approved"] = True
+        else:
+            return_dict["approved"] = False
+        return output["feedback"]
 
 
 if __name__ == "__main__":

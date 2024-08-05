@@ -30,6 +30,23 @@ def start_sim():
     return jsonify({"message": f'{no_turns} turn(s) simulated successfully'}), 200
 
 
+@app.route('/api/narration', methods=['GET'])
+def get_narration():
+    if sim:
+        return jsonify({"narration": sim.currentEnvironment.narrative}), 200
+    return jsonify({"error": "Simulation not started"}), 400
+
+
+@app.route('/api/user_input', methods=['POST'])
+def submit_player_input():
+    if sim:
+        data = request.json
+        user_input = data.get('input')
+        result = sim.process_user_input(user_input)
+        return jsonify(result), 200
+    return jsonify({"error": "Simulation not started"}), 400
+
+
 @app.route('/api/environments', methods=['GET'])
 def get_environments():
     if sim:

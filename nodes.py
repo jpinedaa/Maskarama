@@ -27,6 +27,39 @@ def update_entity_node(state, agent):
     }
 
 
+def input_node(state, agent):
+    temp_state = state
+    approved = None
+    while True:
+        print("Input: ", json.dumps(temp_state["messages"], indent=4))
+        print("--------------------------------------------------------------------")
+        result = agent.invoke(temp_state["messages"])
+        try:
+            if result.content == '':
+                raise ValueError('Empty response from agent')
+            if 'APPROVED' in result.content:
+                approved = True
+            elif 'REJECTED' in result.content:
+                approved = False
+            else:
+                raise ValueError('Approval status not found in output, please include either APPROVED or REJECTED in the output')
+            break
+        except Exception as e:
+            print(f'Error trying to parse output, Error: {e}, Output: {result.content}, retrying')
+            # update agent state with error message and try again
+            temp_state['messages'].append(AIMessage(content=result.content))
+            temp_state['messages'].append(HumanMessage(content=f'Error trying to parse output - {e}'))
+            continue
+
+    print("Output: ", result.content)
+    print(
+        "--------------------------------------------------------------------")
+    return {
+        "messages": [result.content],
+        "approved": approved
+    }
+
+
 def output_json_node(state, agent):
     temp_state = state
     output = None

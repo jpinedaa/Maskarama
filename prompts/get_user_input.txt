@@ -1,0 +1,139 @@
+Objective:
+Update the environment's overall state, entity-specific states, boundaries, and exit entities based on the user's text input and the current environment state. If the user's request can't be accommodated due to the limitations of the current environment or the scope of the environment object, provide feedback indicating the limitations and mark the response with "REJECTED." If the request can be accommodated, mark the response with "APPROVED" and provide the complete updated environment object alongside a natural prose description of the changes.
+
+General Instructions:
+User Input
+Text: "[User's text input describing their desired action or request]"
+
+Current Environment
+Describe the state of the environment before processing the user's request, focusing on the environment's physical attributes and the physical states of entities within it in relation to the environment. Note that the entity-specific states here do not include internal states, physical health, perceptions, or memories; those aspects are handled by separate state objects and are not considered in this environment object.
+Overall State:
+"[Detailed description of the current overall state of the environment, focusing on physical attributes and atmosphere]"
+
+Entity-Specific States:
+
+Entity: [EntityName1]
+State: "[Detailed description of the entity's physical state in relation to the environment, such as location, posture, and interaction with surroundings]"
+
+Entity: [EntityName2]
+State: "[Detailed description of the entity's physical state in relation to the environment]"
+
+Entity: [EntityName3]
+State: "[Detailed description of the entity's physical state in relation to the environment]"
+
+Boundaries:
+
+ConnectedEnvironmentID: "[EnvironmentID]"
+TransitionCondition: "[Condition]"
+Exit Entities:
+
+(Entities that left the environment during this turn, detailing their departure through a boundary. In the next turn, these entities will no longer appear in the entity-specific states.)
+Processing the User Request
+Evaluation of User Request
+Assess whether the user's request can be accommodated within the current environment. Consider the following criteria:
+
+The request must pertain to entities and locations currently represented in the environment.
+The request should involve only physical changes reflected in the environment and entity-specific states, not internal, emotional, or psychological states, or memories.
+Updating the Environment
+If the request can be accommodated:
+
+APPROVED
+Complete Updated Environment Object: Provide the full updated environment object, including the updated overall state, updated entity-specific states, updated boundaries, and updated exit entities.
+Feedback: In a natural prose style, describe how the environment has changed, highlighting the physical changes and new physical positions or actions of entities as a result of the user's input.
+If the request cannot be accommodated:
+
+REJECTED
+Feedback: Explain why the request cannot be accommodated, providing a natural explanation. For example, if a requested entity is not present or if the requested change involves internal states, indicate why this is outside the scope of what can be altered.
+Example:
+User Input (Approved)
+Text: "I want the column Athena is leaning on to disappear."
+
+Current Environment
+Overall State:
+"The Palace Court is a serene hall filled with divine light and a peaceful atmosphere. The space is adorned with high marble columns and arched windows."
+
+Entity-Specific States:
+
+Entity: Athena
+State: "Athena stands by one of the marble columns, her hand resting lightly on its surface as she contemplates the surroundings."
+
+Entity: Artemis
+State: "Artemis stands nearby, leaning against a column and observing the room."
+
+Entity: Hermes
+State: "Hermes is near the entrance, seemingly preparing to leave the hall."
+
+Boundaries:
+
+ConnectedEnvironmentID: "throneRoom01"
+TransitionCondition: "Through the grand archway"
+Exit Entities:
+
+(None)
+Processing the User Request
+
+Evaluation of User Request
+The user requests the disappearance of a physical object within the current environment—the column Athena is leaning on. This change directly affects the physical state of the environment and can be accommodated.
+
+Outcome
+
+APPROVED
+
+Complete Updated Environment Object:
+
+Overall State: "The Palace Court remains a grand hall, though slightly altered by the absence of one of its marble columns. The divine light still fills the space, maintaining its serene atmosphere."
+
+Entity-Specific States:
+
+Entity: Athena
+State: "Athena stands in the same spot, her hand now suspended in the air where the column once was. She appears momentarily surprised by the sudden change."
+
+Entity: Artemis
+State: "Artemis continues to observe the room, now noting the absence of the column Athena was leaning on."
+
+Entity: Hermes
+State: "Hermes has begun to move towards the exit, a look of curiosity on his face."
+
+Boundaries:
+
+ConnectedEnvironmentID: "throneRoom01"
+TransitionCondition: "Through the grand archway"
+Exit Entities:
+
+(None)
+Feedback: "The marble column Athena was leaning on suddenly disappears, leaving her hand suspended in mid-air. The absence of the column slightly alters the visual symmetry of the Palace Court, but the serene atmosphere remains intact. Athena seems briefly taken aback by the change, while Artemis notices the alteration with quiet curiosity. Meanwhile, Hermes moves closer to the exit, intrigued by the recent events."
+
+User Input (Rejected)
+Text: "I want to have a conversation with Poseidon in the garden."
+
+Current Environment
+Overall State:
+"The Palace Court is a serene hall filled with divine light and a peaceful atmosphere. The space is adorned with high marble columns and arched windows."
+
+Entity-Specific States:
+
+Entity: Athena
+State: "Athena stands by one of the marble columns, her hand resting lightly on its surface as she contemplates the surroundings."
+
+Entity: Artemis
+State: "Artemis stands nearby, leaning against a column and observing the room."
+
+Entity: Hermes
+State: "Hermes is near the entrance, seemingly preparing to leave the hall."
+
+Boundaries:
+
+ConnectedEnvironmentID: "throneRoom01"
+TransitionCondition: "Through the grand archway"
+Exit Entities:
+
+(None)
+Processing the User Request
+
+Evaluation of User Request
+The user requests to interact with Poseidon in the garden. However, Poseidon is not present in the Palace Court, and the environment does not include a garden.
+
+Outcome
+
+REJECTED
+Feedback: "Poseidon is not present in the Palace Court, and there is no garden connected to this space. The request cannot be fulfilled as it involves interacting with entities and locations outside the current environment. Please make requests that involve the entities currently within the Palace Court, such as Athena, Artemis, or Hermes, or actions that take place within the Court itself."

@@ -4,7 +4,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI, HarmCategory, \
     HarmBlockThreshold
 from langgraph.graph import StateGraph
 import io
-from python.Lib.tkinter import Image
+from tkinter import Image
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
