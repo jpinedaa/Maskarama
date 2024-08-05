@@ -34,7 +34,7 @@ def start_sim():
 @app.route('/api/narration', methods=['GET'])
 def get_narration():
     if sim:
-        return jsonify({"narration": sim.environments_dict[sim.currentEnvironment].narrative}), 200
+        return jsonify({"narration": sim.narrative}), 200
     return jsonify({"error": "Simulation not started"}), 400
 
 

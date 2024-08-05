@@ -23,12 +23,14 @@ class Simulation:
 
         self.perspective = self.entities_dict["hermes01"].name
         self.currentEnvironment = self.environments_dict["hallsOfJudgment01"].name
+        self.narrative = ""
 
 
     def run(self, no_turns=1):
         with multiprocessing.Manager() as manager:
             shared_dict = manager.dict()
             shared_dict['perspective'] = self.perspective
+            shared_dict['narrative'] = ""
             env_processes = []
             for env in self.environments_dict:
                 proc = multiprocessing.Process(target=self.environments_dict[env].run_simulation, kwargs={'no_turns': no_turns, 'shared_dict': shared_dict})
@@ -40,6 +42,8 @@ class Simulation:
 
             if 'currentEnvironment' in shared_dict:
                 self.currentEnvironment = shared_dict['currentEnvironment']
+
+            self.narrative = shared_dict['narrative']
 
 
 if __name__ == '__main__':
