@@ -61,7 +61,7 @@ def input_node(state, agent):
 
 
 def output_node(state, agent):
-    return {}
+    return {"output": state["output"]}
 
 
 def output_json_node(state, agent):
