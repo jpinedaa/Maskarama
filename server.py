@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 from simulation import Simulation
+from typing import Optional
 
 
 app = Flask(__name__)
-sim = None
+sim: Optional[Simulation] = None
 
 
 @app.route('/api/status', methods=['GET'])
@@ -33,7 +34,7 @@ def start_sim():
 @app.route('/api/narration', methods=['GET'])
 def get_narration():
     if sim:
-        return jsonify({"narration": sim.currentEnvironment.narrative}), 200
+        return jsonify({"narration": sim.environments_dict[sim.currentEnvironment].narrative}), 200
     return jsonify({"error": "Simulation not started"}), 400
 
 
@@ -42,7 +43,7 @@ def submit_player_input():
     if sim:
         data = request.json
         user_input = data.get('input')
-        result = sim.process_user_input(user_input)
+        result = sim.environments_dict[sim.currentEnvironment].process_user_input(user_input)
         return jsonify(result), 200
     return jsonify({"error": "Simulation not started"}), 400
 
