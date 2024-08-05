@@ -7,3 +7,4 @@ llama-index-graph-stores-neo4j~=0.2.8
 llama-index-llms-gemini~=0.1.11
 llama-index-embeddings-gemini~=0.1.8
 flask~=3.0.3
+docker~=7.1.0

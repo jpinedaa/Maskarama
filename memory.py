@@ -1,4 +1,6 @@
 import os
+import time
+
 from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.core import PropertyGraphIndex, SimpleDirectoryReader
 from llama_index.core.indices.property_graph import DynamicLLMPathExtractor, \
@@ -11,9 +13,9 @@ from utils import base_dir # also sets api key during module import
 llm = Gemini(model_name="models/gemini-1.5-pro")
 embeddings = GeminiEmbedding(
     model_name='models/text-embedding-004')
-MEMORY_MAP = {
-    'athena01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7687'),
-    'artemis01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7686'),
+MEMORY_MAP = MEMORY_MAP = {
+    'athena01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7688'),
+    'artemis01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7687'),
 }
 query_engine = None
 with open(os.path.join(base_dir, "prompts/memory_query.txt"), "r",
@@ -66,5 +68,7 @@ if __name__ == '__main__':
     #     query = input("Query: ")
     #     response = query_engine.query(query)
     #     print(response)
-    construct_memories()
+    #construct_memories()
+    setup_memory_containers()
+    print(MEMORY_MAP)
 
