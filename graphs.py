@@ -1,6 +1,6 @@
 import os
 
-from nodes import update_entity_node, output_json_node
+from nodes import update_entity_node, output_json_node, input_node
 from utils import base_dir, get_json_schema_prompt, build_graph, get_model
 from agents import create_agent, AgentState
 import functools
@@ -39,7 +39,7 @@ def build_input_graph(prompt_file, schema_dict_1, schema_dict_2):
     json_schema_prompt_2 = get_json_schema_prompt(schema_dict_2)
 
     agent = create_agent(llm, input_prompt)
-    node = functools.partial(update_entity_node, agent=agent)
+    node = functools.partial(input_node, agent=agent)
 
     json_agent_1 = create_agent(llm_json, json_schema_prompt_1)
     json_node_1 = functools.partial(output_json_node, agent=json_agent_1)
@@ -47,8 +47,14 @@ def build_input_graph(prompt_file, schema_dict_1, schema_dict_2):
     json_agent_2 = create_agent(llm_json, json_schema_prompt_2)
     json_node_2 = functools.partial(output_json_node, agent=json_agent_2)
 
+    def router(state):
+        if state['approved']:
+            return "approved"
+        else:
+            return "rejected"
+
     nodes = [("Input", node), ("ApprovedOutput", json_node_1), ("RejectedOutput", json_node_2)]
-    edges = [("Input", lambda s: "approved" if s['approved'] else "rejected", {"approved": "ApprovedOutput", "rejected": "RejectedOutput"}),
+    edges = [("Input", router, {"approved": "ApprovedOutput", "rejected": "RejectedOutput"}),
              ("ApprovedOutput", lambda s: "continue", {"continue": "__end__"}),
              ("RejectedOutput", lambda s: "continue", {"continue": "__end__"})]
     state_class = AgentState
