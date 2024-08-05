@@ -60,6 +60,10 @@ def input_node(state, agent):
     }
 
 
+def output_node(state, agent):
+    return {}
+
+
 def output_json_node(state, agent):
     temp_state = state
     output = None
