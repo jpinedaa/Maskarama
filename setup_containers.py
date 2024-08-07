@@ -50,7 +50,7 @@ def start_or_create_container(client, container_name, image_name, port1, port2):
             image_name,
             name=container_name,
             detach=True,
-            ports={port1: '7474/tcp', port2: '7687/tcp'},
+            ports={'7474/tcp': port1 , '7687/tcp': port2},
             environment={
                 'NEO4J_apoc_export_file_enabled': 'true',
                 'NEO4J_apoc_import_file_enabled': 'true',

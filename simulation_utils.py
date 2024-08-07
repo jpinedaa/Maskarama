@@ -171,7 +171,8 @@ class Environment:
             return_dict["approved"] = True
         else:
             return_dict["approved"] = False
-        return output["feedback"]
+        return_dict["feedback"] = output["feedback"]
+        return return_dict
 
 
 if __name__ == "__main__":
