@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 from simulation import Simulation
 from typing import Optional
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
 sim: Optional[Simulation] = None
 
 

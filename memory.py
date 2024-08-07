@@ -13,7 +13,7 @@ from utils import base_dir # also sets api key during module import
 llm = Gemini(model_name="models/gemini-1.5-pro")
 embeddings = GeminiEmbedding(
     model_name='models/text-embedding-004')
-MEMORY_MAP = MEMORY_MAP = {
+MEMORY_MAP = {
     'athena01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7688'),
     'artemis01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7687'),
 }
@@ -69,6 +69,5 @@ if __name__ == '__main__':
     #     response = query_engine.query(query)
     #     print(response)
     #construct_memories()
-    setup_memory_containers()
     print(MEMORY_MAP)
 
