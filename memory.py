@@ -9,9 +9,7 @@ from utils import base_dir, disable_filters # also sets api key during module im
 
 
 
-llm = Gemini(model_name="models/gemini-1.5-pro", safety_settings=disable_filters)
-embeddings = GeminiEmbedding(
-    model_name='models/text-embedding-004')
+
 MEMORY_MAP = {
     'athena01': 7688,
     'artemis01': 7687
@@ -22,8 +20,16 @@ with open(os.path.join(base_dir, "prompts/memory_query.txt"), "r",
     query_prompt = f.read()
 
 
+def load_model():
+    llm = Gemini(model_name="models/gemini-1.5-pro", safety_settings=disable_filters)
+    embeddings = GeminiEmbedding(
+        model_name='models/text-embedding-004')
+    return llm, embeddings
+
+
 def construct_graph(documents, character):
     graph_store = Neo4jPropertyGraphStore('neo4j', 'password', f'bolt://localhost:{MEMORY_MAP[character]}')
+    llm, embeddings = load_model()
     index = PropertyGraphIndex.from_documents(
         documents,
         kg_extractors=[SimpleLLMPathExtractor(llm=llm), ImplicitPathExtractor()],
@@ -36,6 +42,7 @@ def construct_graph(documents, character):
 
 
 def load_graph(character):
+    llm, embeddings = load_model()
     graph_store = Neo4jPropertyGraphStore('neo4j', 'password',
                                           f'bolt://localhost:{MEMORY_MAP[character]}')
     index = PropertyGraphIndex.from_existing(

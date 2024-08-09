@@ -1,16 +1,26 @@
 import requests
 
 # URL of the endpoint
-url = 'http://localhost:5500/api/user_input'  # Replace with the correct URL if different
+#addr = 'http://54.221.38.133:5500/'
+addr = 'http://localhost:5500/'
+# endpoint = 'api/user_input'  # Replace with the correct URL if different
+#
+# # JSON payload to send in the request
+# payload = {
+#     "input": "make hermes slip and fall"  # Replace with the actual input you want to test
+# }
 
-# JSON payload to send in the request
+endpoint = 'api/api_key'
+
 payload = {
-    "input": "make hermes slip and fall"  # Replace with the actual input you want to test
+    "key": "testing"
 }
 
+
 # Send the POST request
-response = requests.post(url, json=payload)
+response = requests.post(addr + endpoint, json=payload)
 
 # Print the response
 print(f'Status Code: {response.status_code}')
 print(f'Response JSON: {response.json()}')
+

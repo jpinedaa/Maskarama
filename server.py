@@ -40,7 +40,7 @@ def start_sim():
 @app.route('/api/narration', methods=['GET'])
 def get_narration():
     try:
-        return jsonify({"narration": sim.last_narration}), 200
+        return jsonify({"narration": sim.narration}), 200
     except Exception as e:
         return handle_internal_error(e)
 
@@ -48,7 +48,7 @@ def get_narration():
 @app.route('/api/last_narration', methods=['GET'])
 def get_last_narration():
     try:
-        return jsonify({"narration": sim.narration}), 200
+        return jsonify({"last_narration": sim.last_narration}), 200
     except Exception as e:
         return handle_internal_error(e)
 
@@ -110,6 +110,7 @@ def get_api_key():
     try:
         key = request.json.get('key')
         update_api_key(key)
+        return jsonify({"msg": "api key updated"}), 200
     except Exception as e:
         return handle_internal_error(e)
 

@@ -186,7 +186,7 @@ class Environment:
             shared_dict["narrative"] = output["narrative"]
 
     def process_user_input(self, user_input):
-        input_msg = f'User Input: {user_input}, Environment Object: Boudaries: {self.boundaries}\nState: {self.state}\nExit Entities: {self.exit_entities}\n'
+        input_msg = f'User Input: {user_input}, Environment Object: Boundaries: {self.boundaries}\nState: {self.state}\nExit Entities: {self.exit_entities}\n'
         output = run_update_module(get_user_input_graph, input_msg, "Get User Input", InputAgentState)
         return_dict = {}
         if "environment" in output:
