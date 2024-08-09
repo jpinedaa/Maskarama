@@ -46,6 +46,14 @@ def get_narration():
         return handle_internal_error(e)
 
 
+@app.route('/api/last_narration', methods=['GET'])
+def get_narration():
+    try:
+        return jsonify({"narration": sim.narration}), 200
+    except Exception as e:
+        return handle_internal_error(e)
+
+
 @app.route('/api/user_input', methods=['POST'])
 def submit_player_input():
     try:
