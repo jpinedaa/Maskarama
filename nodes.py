@@ -4,6 +4,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 def update_entity_node(state, agent):
     temp_state = state
+    retries = 5
     while True:
         print("Input: ", json.dumps(temp_state["messages"], indent=4))
         print("--------------------------------------------------------------------")
@@ -13,6 +14,9 @@ def update_entity_node(state, agent):
                 raise ValueError('Empty response from agent')
             break
         except Exception as e:
+            if retries == 0:
+                raise ValueError('Max retries reached')
+            retries -= 1
             print(f'Error trying to parse output, Error: {e}, Output: {result.content}, retrying')
             # update agent state with error message and try again
             temp_state['messages'].append(AIMessage(content=result.content))
@@ -30,6 +34,7 @@ def update_entity_node(state, agent):
 def input_node(state, agent):
     temp_state = state
     approved = None
+    retries = 5
     while True:
         print("Input: ", json.dumps(temp_state["messages"], indent=4))
         print("--------------------------------------------------------------------")
@@ -45,6 +50,9 @@ def input_node(state, agent):
                 raise ValueError('Approval status not found in output, please include either APPROVED or REJECTED in the output')
             break
         except Exception as e:
+            if retries == 0:
+                raise ValueError('Max retries reached')
+            retries -= 1
             print(f'Error trying to parse output, Error: {e}, Output: {result.content}, retrying')
             # update agent state with error message and try again
             temp_state['messages'].append(AIMessage(content=result.content))
@@ -67,6 +75,7 @@ def output_node(state, agent):
 def output_json_node(state, agent):
     temp_state = state
     output = None
+    retries = 5
     while True:
         result = agent.invoke(temp_state["messages"])
         try:
@@ -75,6 +84,9 @@ def output_json_node(state, agent):
             output = json.loads(result.content.replace('json', '').replace('`', ''))
             break
         except Exception as e:
+            if retries == 0:
+                raise ValueError('Max retries reached')
+            retries -= 1
             print(f'Error trying to parse output, Error: {e}, Output: {result.content}, retrying')
             # update agent state with error message and try again
             # TODO- test if better too retry without appending the error message

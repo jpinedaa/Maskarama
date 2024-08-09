@@ -18,6 +18,7 @@ class Simulation:
         self.last_narration = ""
         self.narration = []
         self.shared_dict = None
+        self.is_running = False
 
         self.load_state()
         self.start_events = {}
@@ -49,6 +50,9 @@ class Simulation:
         proc.start()
 
     def run(self, no_turns=1):
+        if self.is_running:
+            return "Simulation is already running."
+        self.is_running = True
         self.shared_dict['no_turns'] = no_turns
 
         # Signal all processes to start the simulation
@@ -94,6 +98,7 @@ class Simulation:
             end_event.clear()
 
         self.save_state()
+        self.is_running = False
         yield f"Simulation completed after {no_turns} turns."
 
     def wait_event(self, env):
@@ -165,6 +170,21 @@ class Simulation:
         self.currentEnvironment = status_json["currentEnvironment"]
         self.narration = status_json["narration"]
         self.last_narration = self.narration[-1] if len(self.narration) > 0 else ""
+
+    def reset_state(self):
+        if os.path.exists('state/entities.txt'):
+            os.remove('state/entities.txt')
+        if os.path.exists('state/environments.txt'):
+            os.remove('state/environments.txt')
+        if os.path.exists('state/status.txt'):
+            os.remove('state/status.txt')
+
+    def reset(self):
+        self.reset_state()
+        for proc in self.processes.values():
+            proc.terminate()
+        self.__init__()
+
 
 def run_environment_simulation(env_name, env, start_event, turn_event, end_event, shared_dict):
     while True:

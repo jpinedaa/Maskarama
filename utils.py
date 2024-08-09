@@ -24,6 +24,15 @@ def set_api_key():
 set_api_key()
 
 
+def update_api_key(api_key):
+    with open(os.path.join(base_dir, "config.json"), "r") as f:
+        config = json.load(f)
+    config["api_key"] = api_key
+    with open(os.path.join(base_dir, "config.json"), "w") as f:
+        json.dump(config, f)
+    set_api_key()
+
+
 def get_model(json_output=False):
     set_api_key()
     # return ChatOpenAI(model="gpt-4-turbo", api_key="")
