@@ -1,0 +1,5 @@
+{
+    "perspective": "hermes01",
+    "currentEnvironment": "hallsOfJudgment01",
+    "narration": []
+}

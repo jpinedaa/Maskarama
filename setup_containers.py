@@ -2,41 +2,157 @@ import os
 import time
 from utils import base_dir
 import docker
+from memory import MEMORY_MAP
 
-def export_container(client, container_name, export_path, image_name=None):
+
+def wait_for_container(container, timeout=30):
+    """Wait for a container to be ready."""
+    for _ in range(timeout):
+        container.reload()
+        if container.status == 'running':
+            return True
+        time.sleep(1)
+    return False
+
+
+def export_database(container_name, export_path):
     try:
+        client = docker.from_env(timeout=600)
         container = client.containers.get(container_name)
-        print(f"Committing container {container_name} to a new image...")
+        print(f"Stopping the container {container_name} to export the database...")
 
-        # Commit the container to a new image
-        if image_name is None:
-            image_name = container_name
-        image = container.commit(repository=image_name)
-        print(f"Committed to image {image.id}")
+        # Stop the entire container
+        container.stop()
 
-        print(f"Saving image {image.id} to {export_path}...")
-        # Save the committed image to a tar file
+        # Export the database using docker cp to avoid issues with container stopping
+        print(f"Exporting database from container {container_name} to {export_path}...")
+
+        # Ensure the directory for the dump exists in the container
+        dump_dir = '/data/backup_dir'
+        container.start()
+        container.exec_run(f'mkdir -p {dump_dir}')
+        container.stop()
+
+        # Run the export command inside the container using `docker exec` after container restart
+        export_command = f"bin/neo4j-admin database dump neo4j --to-path={dump_dir}"
+        container.start()
+        exit_code, output = container.exec_run(export_command)
+        container.stop()
+
+        if exit_code != 0:
+            print(f"Failed to export database: {output.decode('utf-8')}")
+            return
+
+        # Archive the directory into a single file to copy it out (using tar only, not gzip)
+        archive_command = f'tar -cvf /data/backup.dump.tar -C {dump_dir} .'
+        container.start()
+        container.exec_run(archive_command)
+        container.stop()
+
+        # Copy the dump file from the container to the host
         with open(export_path, 'wb') as export_file:
-            for chunk in image.save():
+            bits, _ = container.get_archive('/data/backup.dump.tar')
+            for chunk in bits:
                 export_file.write(chunk)
 
-        print(f"Image saved to {export_path}")
+        print(f"Database exported to {export_path}")
+
+        # Restart the container after exporting
+        container.start()
+        print(f"Container {container_name} restarted successfully.")
+
     except docker.errors.NotFound:
         print(f"Container {container_name} not found. Cannot export.")
     except docker.errors.APIError as e:
         print(f"An error occurred: {e}")
 
 
-def import_container(client, import_path, image_name):
-    print(f"Loading image from {import_path}...")
-    with open(import_path, 'rb') as import_file:
-        image = client.images.load(import_file.read())
-    image[0].tag(image_name)
-    print(f"Image loaded: {image[0].id}, name: {image_name}")
-    return image[0]
+def restart_container(client, container_name):
+    try:
+        container = client.containers.get(container_name)
+        container.restart()
+        print(f"Container {container_name} restarted successfully.")
+    except docker.errors.NotFound:
+        print(f"Container {container_name} not found.")
+    except docker.errors.APIError as e:
+        print(f"An error occurred while restarting the container: {e}")
 
 
-def start_or_create_container(client, container_name, image_name, port1, port2):
+def import_database(client, container_name, import_path, port):
+    print(f"Importing database from {import_path} to container {container_name}...")
+
+    try:
+        # Check if the container already exists and remove it if it does
+        container = client.containers.get(container_name)
+        print(f"Container {container_name} already exists. Stopping and removing it to perform the import...")
+        container.stop()
+        container.remove()
+        print(f"Container {container_name} removed.")
+    except docker.errors.NotFound:
+        print(f"Container {container_name} not found. Proceeding to create a new one...")
+
+    # Create a new container for importing the database
+    try:
+        container = client.containers.run(
+            'neo4j:latest',
+            name=container_name,
+            detach=True,
+            ports={'7687/tcp': port},
+            volumes={import_path: {'bind': '/data/backup.tar', 'mode': 'rw'}},
+            environment={
+                'NEO4J_apoc_export_file_enabled': 'true',
+                'NEO4J_apoc_import_file_enabled': 'true',
+                'NEO4J_apoc_import_file_useneo4jconfig': 'true',
+                'NEO4J_AUTH': 'neo4j/password',
+                'NEO4J_PLUGINS': '["apoc"]'
+            }
+        )
+
+        # Ensure the container is fully up and running before continuing
+        if not wait_for_container(container):
+            print(f"Container {container_name} did not start properly.")
+            return
+
+        # Ensure the directory for the import exists
+        result = container.exec_run('mkdir -p /data/backup_dir')
+        if result.exit_code != 0:
+            print(f"Failed to create directory: {result.output.decode('utf-8')}")
+            return
+
+        # Unpack the initial tarball
+        result = container.exec_run('tar -xvf /data/backup.tar -C /data/backup_dir')
+        if result.exit_code != 0:
+            print(f"Failed to unpack the tarball: {result.output.decode('utf-8')}")
+            return
+
+        # Now unpack the nested tarball (actual database files)
+        result = container.exec_run('tar -xvf /data/backup_dir/backup.dump.tar -C /data/backup_dir')
+        if result.exit_code != 0:
+            print(f"Failed to unpack the nested tarball: {result.output.decode('utf-8')}")
+            return
+
+        # List the contents of the directory to verify the files
+        result = container.exec_run('ls -l /data/backup_dir')
+        print(f"Contents of /data/backup_dir after extraction:\n{result.output.decode('utf-8')}")
+
+        # Run the import command inside the container using --from-path and --overwrite-destination
+        exit_code, output = container.exec_run(
+            "bin/neo4j-admin database load neo4j --from-path=/data/backup_dir --overwrite-destination=true --verbose"
+        )
+        if exit_code != 0:
+            print(f"Failed to import database: {output.decode('utf-8')}")
+        else:
+            print(f"Database imported successfully to container {container_name}")
+
+    except docker.errors.APIError as e:
+        print(f"An error occurred: {e}")
+        return
+
+    return container
+
+
+
+def start_or_create_container(client, container_name, port):
     try:
         container = client.containers.get(container_name)
         if container.status != 'running':
@@ -47,10 +163,10 @@ def start_or_create_container(client, container_name, image_name, port1, port2):
     except docker.errors.NotFound:
         print(f"Container {container_name} not found. Creating new container...")
         container = client.containers.run(
-            image_name,
+            'neo4j:latest',
             name=container_name,
             detach=True,
-            ports={'7474/tcp': port1 , '7687/tcp': port2},
+            ports={'7687/tcp': port},
             environment={
                 'NEO4J_apoc_export_file_enabled': 'true',
                 'NEO4J_apoc_import_file_enabled': 'true',
@@ -67,25 +183,17 @@ def setup_memory_containers():
     client = docker.from_env(timeout=600)
     containers_dir = os.path.join(base_dir, "memory_containers")
 
-    memory_map = {}
-    port1 = 7474
-    port2 = 7687
     for container in os.listdir(containers_dir):
-        if container.endswith(".tar"):
+        if container.endswith(".dump.tar"):
             import_path = os.path.join(containers_dir, container)
-            image_name = container.replace(".tar", "")
-            try:
-                client.images.get(image_name)
-                print(f"Image {image_name} already exists.")
-            except docker.errors.ImageNotFound:
-                print(f"importing image {image_name}...")
-                import_container(client, import_path, image_name)
-            start_or_create_container(client, image_name, image_name, port1, port2)
-            port1 += 1
-            port2 += 1
+            container_name = container.replace(".dump.tar", "")
+            #start_or_create_container(client, container_name, port)
+            import_database(client, container_name, import_path, MEMORY_MAP[container_name])
+            restart_container(client, container_name)
 
-    return memory_map
 
 
 if __name__ == '__main__':
+    character = 'athena01'
+    #export_database(character, os.path.join(base_dir, "memory_containers", f"{character}.dump.tar"))
     setup_memory_containers()

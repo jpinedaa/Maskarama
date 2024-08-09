@@ -37,6 +37,12 @@ class Entity:
         self.name = name
         self.perception = perception
 
+    def update_object(self, env_data):
+        self.state = env_data["state"]
+        self.inputs = env_data["inputs"]
+        self.perception = env_data["perception"]
+        self.currentOutput = env_data["currentOutput"]
+
     def update(self):
         self.update_state()
         if self.perception:
@@ -53,7 +59,7 @@ class Entity:
         memory = None
         if self.name in MEMORY_MAP:
             if mem.query_engine is None:
-                mem.query_engine = load_graph(MEMORY_MAP[self.name])[1]
+                mem.query_engine = load_graph(self.name)[1]
             memory = mem.query_engine.query(query)
         self.update_perception(memory)
 
@@ -97,8 +103,10 @@ class Environment:
                 if len(self.exit_entities) > 0:
                     for exiting_entity in self.exit_entities:
                         if exiting_entity in self.entities:
+                            if self.exit_entities[exiting_entity] not in shared_dict:
+                                shared_dict[self.exit_entities[exiting_entity]] = []
                             shared_dict[self.exit_entities[exiting_entity]].append(self.entities[exiting_entity])
-                            self.entities.remove(exiting_entity)
+                            del self.entities[exiting_entity]
                             break
             print(
                 "--------------------------------------------------------------------")
@@ -108,6 +116,21 @@ class Environment:
             if no_turns is not None:
                 no_turns -= 1
 
+        environment_result = {"state": self.state, "boundaries": self.boundaries, "exit_entities": self.exit_entities}
+        entities_result = {entity_name: {"state": entity.state, "inputs": entity.inputs, "perception": entity.perception, "currentOutput": entity.currentOutput} for entity_name, entity in self.entities.items()}
+        return environment_result, entities_result
+
+
+    def update_object(self, env_data, ent_data):
+        self.state = env_data["state"]
+        self.boundaries = env_data["boundaries"]
+        self.exit_entities = env_data["exit_entities"]
+        for entity_name, entity in self.entities.items():
+            if entity_name in ent_data:
+                entity.state = ent_data[entity_name]["state"]
+                entity.inputs = ent_data[entity_name]["inputs"]
+                entity.perception = ent_data[entity_name]["perception"]
+                entity.currentOutput = ent_data[entity_name]["currentOutput"]
 
     def update(self):
         #for entity in self.entities:

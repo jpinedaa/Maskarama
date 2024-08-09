@@ -1,21 +1,20 @@
 import os
-import time
-
 from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.core import PropertyGraphIndex, SimpleDirectoryReader
 from llama_index.core.indices.property_graph import DynamicLLMPathExtractor, \
     SimpleLLMPathExtractor, ImplicitPathExtractor
 from llama_index.graph_stores.neo4j import Neo4jPropertyGraphStore
 from llama_index.llms.gemini import Gemini
-from utils import base_dir # also sets api key during module import
+from utils import base_dir, disable_filters # also sets api key during module import
 
 
-llm = Gemini(model_name="models/gemini-1.5-pro")
+
+llm = Gemini(model_name="models/gemini-1.5-pro", safety_settings=disable_filters)
 embeddings = GeminiEmbedding(
     model_name='models/text-embedding-004')
 MEMORY_MAP = {
-    'athena01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7688'),
-    'artemis01': Neo4jPropertyGraphStore('neo4j', 'password', 'bolt://localhost:7687'),
+    'athena01': 7688,
+    'artemis01': 7687
 }
 query_engine = None
 with open(os.path.join(base_dir, "prompts/memory_query.txt"), "r",
@@ -23,7 +22,8 @@ with open(os.path.join(base_dir, "prompts/memory_query.txt"), "r",
     query_prompt = f.read()
 
 
-def construct_graph(documents, graph_store):
+def construct_graph(documents, character):
+    graph_store = Neo4jPropertyGraphStore('neo4j', 'password', f'bolt://localhost:{MEMORY_MAP[character]}')
     index = PropertyGraphIndex.from_documents(
         documents,
         kg_extractors=[SimpleLLMPathExtractor(llm=llm), ImplicitPathExtractor()],
@@ -35,7 +35,9 @@ def construct_graph(documents, graph_store):
     return index
 
 
-def load_graph(graph_store):
+def load_graph(character):
+    graph_store = Neo4jPropertyGraphStore('neo4j', 'password',
+                                          f'bolt://localhost:{MEMORY_MAP[character]}')
     index = PropertyGraphIndex.from_existing(
         property_graph_store=graph_store,
         llm=llm,
@@ -46,28 +48,30 @@ def load_graph(graph_store):
 
 
 def construct_memories():
-    # Delete currente memories
-    for character in MEMORY_MAP:
-        with MEMORY_MAP[character]._driver.session() as session:
+    for character in MEMORY_MAP.keys():
+        graph_store = Neo4jPropertyGraphStore('neo4j', 'password',
+                                              f'bolt://localhost:{MEMORY_MAP[character]}')
+        # Delete currente memories
+        with graph_store._driver.session() as session:
             session.run("MATCH (n) DETACH DELETE n")
         print(f"Memory for {character} deleted.")
-    
-    # Create memories
-    for character in MEMORY_MAP:
+
+        # Generate memories
         documents = SimpleDirectoryReader(f"./memories/{character}").load_data()
-        index = construct_graph(documents, MEMORY_MAP[character])
+        construct_graph(documents, character)
         print(f"Memory for {character} constructed and saved.")
 
 
 if __name__ == '__main__':
-    # character = 'athena01'
+    character = 'athena01'
     # documents = SimpleDirectoryReader(f"./memories/{character}").load_data()
-    # #index = construct_graph(documents, MEMORY_MAP[character])
-    # index, query_engine = load_graph(MEMORY_MAP[character])
-    # while True:
-    #     query = input("Query: ")
-    #     response = query_engine.query(query)
-    #     print(response)
+    # index = construct_graph(documents, character)
+    index, query_engine = load_graph(character)
+    while True:
+        query = input("Query: ")
+        response = query_engine.query(query)
+        print(response)
     #construct_memories()
-    print(MEMORY_MAP)
+    #print(MEMORY_MAP)
+
 

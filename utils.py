@@ -1,13 +1,18 @@
 import json
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI, HarmCategory, \
-    HarmBlockThreshold
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph
 import io
 from tkinter import Image
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
+disable_filters = {HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+                   }
 
 
 def set_api_key():
@@ -24,13 +29,11 @@ def get_model(json_output=False):
     # return ChatOpenAI(model="gpt-4-turbo", api_key="")
     if not json_output:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
-                                      safety_settings={
-                                          HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE, },
+                                      safety_settings=disable_filters,
                                       temperature=0)
     else:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
-                                      safety_settings={
-                                          HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE, },
+                                      safety_settings=disable_filters,
                                       temperature=0, generation_config={"response_mime_type": "application/json"})
     return llm
 
