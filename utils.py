@@ -4,7 +4,7 @@ from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph
 import io
-from tkinter import Image
+#from tkinter import Image
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -58,18 +58,18 @@ def get_json_schema_prompt(dict_schema):
     return json_schema_prompt
 
 
-def show_graph(graph):
-    # show image
-    graph_image = graph.get_graph(xray=True).draw_mermaid_png()
-
-    # Convert bytes to a file-like object
-    graph_image_file = io.BytesIO(graph_image)
-
-    # Open the image file
-    img = Image.open(graph_image_file)
-
-    ## Display the image
-    img.show()
+# def show_graph(graph):
+#     # show image
+#     graph_image = graph.get_graph(xray=True).draw_mermaid_png()
+#
+#     # Convert bytes to a file-like object
+#     graph_image_file = io.BytesIO(graph_image)
+# 
+#     # Open the image file
+#     img = Image.open(graph_image_file)
+#
+#     ## Display the image
+#     img.show()
 
 
 def build_graph(state_class, nodes, edges, entry_point):

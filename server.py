@@ -47,7 +47,7 @@ def get_narration():
 
 
 @app.route('/api/last_narration', methods=['GET'])
-def get_narration():
+def get_last_narration():
     try:
         return jsonify({"narration": sim.narration}), 200
     except Exception as e:
