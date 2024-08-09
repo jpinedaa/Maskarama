@@ -1,0 +1,10 @@
+[Unit]
+Description=EoC Server
+After=network.target
+
+[Service]
+ExecStart=/home/ubuntu/Echoes-of-Creation/venv/bin/python /home/ubuntu/Echoes-of-Creation/server.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
