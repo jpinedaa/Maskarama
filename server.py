@@ -33,7 +33,7 @@ def get_status():
 def start_sim():
     try:
         no_turns = request.args.get('no_turns', default=1, type=int)
-        return Response(sim.run(no_turns), mimetype='application/json')
+        return Response(sim.run(no_turns))
     except Exception as e:
         return handle_internal_error(e)
 
