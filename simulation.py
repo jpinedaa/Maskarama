@@ -137,18 +137,18 @@ class Simulation:
             json.dump({"perspective": self.perspective, "currentEnvironment": self.currentEnvironment, "narration": self.narration}, file, indent=4)
 
     def load_state(self):
-        if os.path.exists('state/entities.txt'):
-            ent_file = 'state/entities.txt'
+        if os.path.exists(os.path.join(base_dir, 'state/entities.txt')):
+            ent_file = os.path.join(base_dir, 'state/entities.txt')
         else:
-            ent_file = 'initial_states/entities.txt'
-        if os.path.exists('state/environments.txt'):
-            env_file = 'state/environments.txt'
+            ent_file = os.path.join(base_dir, 'initial_states/entities.txt')
+        if os.path.exists(os.path.join(base_dir, 'state/environments.txt')):
+            env_file = os.path.join(base_dir, 'state/environments.txt')
         else:
-            env_file = 'initial_states/environments.txt'
-        if os.path.exists('state/status.txt'):
-            status_file = 'state/status.txt'
+            env_file = os.path.join(base_dir, 'initial_states/environments.txt')
+        if os.path.exists(os.path.join(base_dir, 'state/status.txt')):
+            status_file = os.path.join(base_dir, 'state/status.txt')
         else:
-            status_file = 'initial_states/status.txt'
+            status_file = os.path.join(base_dir, 'initial_states/status.txt')
 
         with open(env_file, 'r') as file:
             env_json = json.load(file)

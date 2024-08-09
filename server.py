@@ -21,7 +21,6 @@ def handle_internal_error(e):
 def get_status():
     try:
         status = {}
-        status['simulation_started'] = True
         status['currentEnvironment'] = sim.currentEnvironment
         status['perspective'] = sim.perspective
         return jsonify(status), 200

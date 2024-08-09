@@ -64,7 +64,7 @@ def get_json_schema_prompt(dict_schema):
 #
 #     # Convert bytes to a file-like object
 #     graph_image_file = io.BytesIO(graph_image)
-# 
+#
 #     # Open the image file
 #     img = Image.open(graph_image_file)
 #
