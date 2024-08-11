@@ -194,6 +194,14 @@ class Simulation:
         self.narration = status_json["narration"]
         self.last_narration = self.narration[-1] if len(self.narration) > 0 else ""
 
+    def set_current_environment_from_perspective(self):
+        for env_name, env in self.environments_dict.items():
+            for entity in env.entities.keys():
+                if entity == self.perspective:
+                    self.currentEnvironment = env_name
+                    logging.info(f"Perspective set to {self.perspective}")
+        self.save_state()
+
     def reset_state(self):
         if os.path.exists('state/entities.txt'):
             os.remove('state/entities.txt')

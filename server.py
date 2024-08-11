@@ -144,7 +144,7 @@ def set_api_key():
     try:
         key = request.json.get('key')
         update_api_key(key)
-        resp = send_command('restart_process')
+        send_command('restart_process')
         return jsonify({"msg": "api key updated"}), 200
     except Exception as e:
         return handle_internal_error(e)

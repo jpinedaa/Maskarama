@@ -62,6 +62,7 @@ def handle_command(command_data, response_dict, sim):
             response = {"msg": "reset successful"}
         elif command == 'perspective':
             sim.perspective = command_data['character_name']
+            sim.set_current_environment_from_perspective()
             response = {"msg": f"perspective set to {sim.perspective}"}
         elif command == 'restart_process':
             sim.restart_all_processes()
