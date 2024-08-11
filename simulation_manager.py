@@ -61,8 +61,11 @@ def handle_command(command_data, response_dict, sim):
             sim.reset()
             response = {"msg": "reset successful"}
         elif command == 'perspective':
-            sim.perspective = command_data['character']
+            sim.perspective = command_data['character_name']
             response = {"msg": f"perspective set to {sim.perspective}"}
+        elif command == 'restart_process':
+            sim.restart_all_processes()
+            response = {"msg": "process restarted"}
         else:
             response = {"error": "Unknown command"}
             logging.error(f"Unknown command {command}")

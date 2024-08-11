@@ -3,6 +3,7 @@ import multiprocessing
 import os.path
 import logging
 import traceback
+import langchain_google_genai
 from simulation_utils import Entity, Environment
 from utils import base_dir
 
@@ -109,6 +110,7 @@ class Simulation:
 
     def wait_event(self, env):
         timeout = 10
+        retries = 5
 
         while True:
             # Wait with a timeout
@@ -118,10 +120,14 @@ class Simulation:
                 # Check if errors occurred during the turn
                 logging.info(f"Environment {env} Event triggered")
                 if f'{env}-error' in self.shared_dict:
-                    logging.error(f"Error occurred in environment {env}: {self.shared_dict[f'{env}-error']}")
+                    err_msg = f"Error occurred in environment {env}: {self.shared_dict[f'{env}-error']}"
+                    logging.error(err_msg)
+                    if retries == 0:
+                        raise Exception(err_msg)
                     del self.shared_dict[f'{env}-error']
                     self.turn_events[env].clear()
                     self.start_events[env].set()  # Signal the process to start
+                    retries -= 1
                 else:
                     break  # Event was successfully triggered, exit the loop
 
@@ -138,6 +144,10 @@ class Simulation:
         logging.info(f"Restarting environment process: {env_name}")
         self.processes[env_name].terminate()
         self.start_worker_process(env_name, self.environments_dict[env_name])
+
+    def restart_all_processes(self):
+        for env_name in self.environments_dict:
+            self.restart_process(env_name)
 
     def save_state(self):
         with open(os.path.join(base_dir, 'state/entities.txt'), 'w') as file:

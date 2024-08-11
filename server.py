@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, Response
 from simulation_manager import simulation_process
 from flask_cors import CORS
 from utils import update_api_key
+import logging
 
 
 app = Flask(__name__)
@@ -28,6 +29,7 @@ def send_command(command, **kwargs):
     while True:
         if request_id in response_dict:
             response = response_dict.pop(request_id)
+            logging.debug(f"Send command response: {response}")
             if 'error' in response:
                 raise Exception(response['error'])
             return response['result']
@@ -119,7 +121,7 @@ def get_entities():
 @app.route('/api/perspective', methods=['GET'])
 def set_perspective():
     try:
-        character = request.args.get('character', default=1, type=int)
+        character = request.args.get('character', default=1, type=str)
         if character == 1:
             return jsonify({"msg": "Missing character in request"}), 200
         resp = send_command('perspective', character_name=character)
@@ -142,6 +144,7 @@ def set_api_key():
     try:
         key = request.json.get('key')
         update_api_key(key)
+        resp = send_command('restart_process')
         return jsonify({"msg": "api key updated"}), 200
     except Exception as e:
         return handle_internal_error(e)
