@@ -2,11 +2,9 @@ import json
 import multiprocessing
 import os.path
 import logging
+import traceback
 from simulation_utils import Entity, Environment
 from utils import base_dir
-
-# Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
 
 class Simulation:
@@ -32,10 +30,10 @@ class Simulation:
         self.shared_dict['perspective'] = self.perspective
         self.shared_dict['narrative'] = self.last_narration
         self.shared_dict['results'] = manager.dict()
-        self.shared_dict['errors'] = manager.list()
 
         # Initialize events and processes
         for env_name, env in self.environments_dict.items():
+            logging.info(f"Initializing environment process: {env_name}")
             self.start_events[env_name] = multiprocessing.Event()
             self.turn_events[env_name] = multiprocessing.Event()
             self.end_events[env_name] = multiprocessing.Event()
@@ -48,12 +46,14 @@ class Simulation:
         )
         self.processes[env_name] = proc
         proc.start()
+        logging.info(f"Started environment process: {env_name}")
 
     def run(self, no_turns=1):
         if self.is_running:
             return "Simulation is already running."
         self.is_running = True
         self.shared_dict['no_turns'] = no_turns
+        self.shared_dict['current_turn'] = 0
 
         # Signal all processes to start the simulation
         for start_event in self.start_events.values():
@@ -72,10 +72,14 @@ class Simulation:
             self.last_narration = self.shared_dict['narrative']
             self.narration.append(self.last_narration)
 
+            logging.info(f"yielding narration")
             yield self.last_narration + '\n'
+            logging.info(f"yielded narration: {self.last_narration}")
 
             # Wait for all environments to complete the current turn
             for env_name in self.environments_dict:
+                if env_name == self.currentEnvironment:
+                    continue
                 self.wait_event(env_name)
             # Clear the turn events and signal to start the next turn
             for turn_event in self.turn_events.values():
@@ -89,6 +93,8 @@ class Simulation:
                                                                result['entities'])
                 for entity_name, entity_data in result['entities'].items():
                     self.entities_dict[entity_name].update_object(entity_data)
+
+            self.shared_dict['current_turn'] += 1
 
         # Wait for all processes to signal that the simulation has ended
         for end_event in self.end_events.values():
@@ -109,22 +115,29 @@ class Simulation:
             event_triggered = self.turn_events[env].wait(timeout)
 
             if event_triggered:
-                break  # Event was successfully triggered, exit the loop
+                # Check if errors occurred during the turn
+                logging.info(f"Environment {env} Event triggered")
+                if f'{env}-error' in self.shared_dict:
+                    logging.error(f"Error occurred in environment {env}: {self.shared_dict[f'{env}-error']}")
+                    del self.shared_dict[f'{env}-error']
+                    self.turn_events[env].clear()
+                    self.start_events[env].set()  # Signal the process to start
+                else:
+                    break  # Event was successfully triggered, exit the loop
 
             # Check if the process is still alive after the timeout
             if not self.processes[env].is_alive():
                 logging.error(
                     f"Process for environment {env} has died unexpectedly during wait.")
-                self.restart_process(env)
-                # After restarting, optionally reinitialize the event or handle it accordingly
                 self.turn_events[env].clear()  # Clear any potentially stale events
+                self.start_events[env].set()  # Signal the process to start
+                self.restart_process(env)
                 continue  # Restart the loop to check the next process
 
     def restart_process(self, env_name):
         logging.info(f"Restarting environment process: {env_name}")
         self.processes[env_name].terminate()
         self.start_worker_process(env_name, self.environments_dict[env_name])
-        self.shared_dict['errors'].remove(self.shared_dict['errors'][-1])
 
     def save_state(self):
         with open(os.path.join(base_dir, 'state/entities.txt'), 'w') as file:
@@ -190,17 +203,20 @@ def run_environment_simulation(env_name, env, start_event, turn_event, end_event
     while True:
         try:
             # Wait for the start signal
+            logging.info(f"Environment {env_name} waiting for start signal")
             start_event.wait()
             start_event.clear()
 
             # Run the simulation for the specified number of turns
-            for _ in range(shared_dict['no_turns']):
+            for _ in range(shared_dict['current_turn'], shared_dict['no_turns']):
 
                 # Check if we should stop early
                 if end_event.is_set():
+                    logging.info(f"Environment {env_name} received stop signal")
                     break
 
                 # Perform the simulation for one turn
+                logging.info(f"Environment {env_name} running turn")
                 env_result, entities_result = env.run_simulation(no_turns=1, shared_dict=shared_dict)
 
                 # Store the results in the shared_dict
@@ -211,6 +227,7 @@ def run_environment_simulation(env_name, env, start_event, turn_event, end_event
                 turn_event.set()
 
                 # Wait until the main process acknowledges the turn completion
+                logging.info(f"Environment {env_name} waiting for next turn")
                 start_event.wait()
                 start_event.clear()
                 logging.info(f"Environment {env_name} completed turn")
@@ -219,8 +236,8 @@ def run_environment_simulation(env_name, env, start_event, turn_event, end_event
             end_event.set()
 
         except Exception as e:
-            logging.exception(f"Exception in environment {env_name}")
-            #shared_dict['errors'].append(f"Exception in environment {env_name}: {str(e)}")
+            logging.error(f"Exception in environment {env_name}, traceback: {traceback.format_exc()}")
+            shared_dict[f'{env_name}-error'] = f"Exception in environment {env_name}: {str(e)}"
             turn_event.set()  # Ensure the main process knows this turn is done to prevent deadlocks
 
 if __name__ == '__main__':

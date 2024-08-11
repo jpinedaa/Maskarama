@@ -144,7 +144,7 @@ class Environment:
 
     def update_all_entities_states(self):
         input_msg = {entity_name: {"state": entity.state, "inputs": entity.inputs} for entity_name, entity in self.entities.items()}
-        output = run_update_module(entities_update_graph, f"Entities: {input_msg}", "Update All Entities States")
+        output = run_update_module(entities_update_graph, f"Entities: {json.dumps(input_msg, indent=4)}", "Update All Entities States")
         for entity_name, entity in self.entities.items():
             entity.state = output[entity_name]
 
@@ -154,7 +154,7 @@ class Environment:
             input_msg[entity_name] = {"state": entity.state, "inputs": entity.inputs}
             if entity.perception:
                 input_msg[entity_name]["perception"] = entity.perception
-        output = run_update_module(generate_currentoutput_graph, f"Entities: {input_msg}", "Update All Entities Current Outputs")
+        output = run_update_module(generate_currentoutput_graph, f"Entities: {json.dumps(input_msg, indent=4)}", "Update All Entities Current Outputs")
         for entity_name, entity in self.entities.items():
             entity.currentOutput = output[entity_name]
 

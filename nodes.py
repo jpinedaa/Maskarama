@@ -87,11 +87,11 @@ def output_json_node(state, agent):
             if retries == 0:
                 raise ValueError('Max retries reached')
             retries -= 1
-            print(f'Error trying to parse output, Error: {e}, Output: {result.content}, retrying')
+            print(f'Error trying to parse output, Error: {e}, output should be json format without any additional text our output. Wrong Output: {result.content}, retrying')
             # update agent state with error message and try again
-            # TODO- test if better too retry without appending the error message
-            #temp_state['messages'].append(AIMessage(content=result.content))
-            #temp_state['messages'].append(HumanMessage(content=f'Error trying to parse json output, please try again,  error: {e}'))
+            # TODO - test if better too retry without appending the error message
+            temp_state['messages'].append(AIMessage(content=result.content))
+            temp_state['messages'].append(HumanMessage(content=f'Error trying to parse json output, please try again,  error: {e}'))
             continue
 
     print("JSON Output: ", json.dumps(output, indent=4))

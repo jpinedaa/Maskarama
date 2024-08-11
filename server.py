@@ -1,5 +1,8 @@
+import time
+import uuid
+from multiprocessing import Process, Queue, Event, Manager
 from flask import Flask, request, jsonify, Response
-from simulation import Simulation
+from simulation_manager import simulation_process
 from flask_cors import CORS
 from utils import update_api_key
 
@@ -17,12 +20,23 @@ def handle_internal_error(e):
     return jsonify(response), 500
 
 
+# Helper function to send commands to the simulation and wait for the correct response
+def send_command(command, **kwargs):
+    request_id = str(uuid.uuid4())
+    command_queue.put({'command': command, 'id': request_id, **kwargs})
+
+    while True:
+        if request_id in response_dict:
+            response = response_dict.pop(request_id)
+            if 'error' in response:
+                raise Exception(response['error'])
+            return response['result']
+
+
 @app.route('/api/status', methods=['GET'])
 def get_status():
     try:
-        status = {}
-        status['currentEnvironment'] = sim.currentEnvironment
-        status['perspective'] = sim.perspective
+        status = send_command('status')
         return jsonify(status), 200
     except Exception as e:
         return handle_internal_error(e)
@@ -32,7 +46,25 @@ def get_status():
 def start_sim():
     try:
         no_turns = request.args.get('no_turns', default=1, type=int)
-        return Response(sim.run(no_turns))
+
+        # Generator function to yield the results
+        def generate():
+            request_id = str(uuid.uuid4())
+            command_queue.put({'command': 'run', 'id': request_id, 'no_turns': no_turns})
+
+            while True:
+                if request_id in response_dict:
+                    response = response_dict.pop(request_id)
+                    if 'error' in response:
+                        yield f"ERROR: {response['error']}\n\n"
+                        break
+                    if response['result'] == 'Simulation run completed':
+                        break
+                    else:
+                        yield f"{response['result']}\n\n"
+                time.sleep(0.1)
+
+        return Response(generate(), content_type='text/event-stream')
     except Exception as e:
         return handle_internal_error(e)
 
@@ -40,7 +72,8 @@ def start_sim():
 @app.route('/api/narration', methods=['GET'])
 def get_narration():
     try:
-        return jsonify({"narration": sim.narration}), 200
+        narration = send_command('narration')
+        return jsonify(narration), 200
     except Exception as e:
         return handle_internal_error(e)
 
@@ -48,7 +81,8 @@ def get_narration():
 @app.route('/api/last_narration', methods=['GET'])
 def get_last_narration():
     try:
-        return jsonify({"last_narration": sim.last_narration}), 200
+        last_narration = send_command('last_narration')
+        return jsonify(last_narration), 200
     except Exception as e:
         return handle_internal_error(e)
 
@@ -58,7 +92,7 @@ def submit_player_input():
     try:
         data = request.json
         user_input = data.get('input')
-        result = sim.environments_dict[sim.currentEnvironment].process_user_input(user_input)
+        result = send_command('user_input', user_input=user_input)
         return jsonify(result), 200
     except Exception as e:
         return handle_internal_error(e)
@@ -67,14 +101,7 @@ def submit_player_input():
 @app.route('/api/environments', methods=['GET'])
 def get_environments():
     try:
-        environments = {
-            env: {
-                "entities": [ent.name for ent in obj.entities.values()],
-                "boundaries": obj.boundaries,
-                "state": obj.state
-            }
-            for env, obj in sim.environments_dict.items()
-        }
+        environments = send_command('environments')
         return jsonify(environments), 200
     except Exception as e:
         return handle_internal_error(e)
@@ -83,15 +110,20 @@ def get_environments():
 @app.route('/api/entities', methods=['GET'])
 def get_entities():
     try:
-        entities = {
-            ent: {
-                "state": obj.state,
-                "inputs": obj.inputs,
-                "perception": obj.perception
-            }
-            for ent, obj in sim.entities_dict.items()
-        }
+        entities = send_command('entities')
         return jsonify(entities), 200
+    except Exception as e:
+        return handle_internal_error(e)
+
+
+@app.route('/api/perspective', methods=['GET'])
+def set_perspective():
+    try:
+        character = request.args.get('character', default=1, type=int)
+        if character == 1:
+            return jsonify({"msg": "Missing character in request"}), 200
+        resp = send_command('perspective', character_name=character)
+        return jsonify(resp), 200
     except Exception as e:
         return handle_internal_error(e)
 
@@ -99,14 +131,14 @@ def get_entities():
 @app.route('/api/reset', methods=['GET'])
 def reset_simulation():
     try:
-        sim.reset()
-        return jsonify({"msg": "reset successful"}), 200
+        result = send_command('reset')
+        return jsonify(result), 200
     except Exception as e:
         return handle_internal_error(e)
 
 
 @app.route('/api/api_key', methods=['POST'])
-def get_api_key():
+def set_api_key():
     try:
         key = request.json.get('key')
         update_api_key(key)
@@ -123,7 +155,21 @@ def resource_not_found(e):
 
 # Run the server
 if __name__ == '__main__':
-    global sim
+    global command_queue, response_dict, shutdown_event
 
-    sim = Simulation()
-    app.run(debug=True, host='0.0.0.0', port=5500)
+    # Command Queue
+    command_queue = Queue()
+    shutdown_event = Event()
+
+    # Create a manager for shared data structures
+    manager = Manager()
+    response_dict = manager.dict()  # Shared dictionary to store responses
+
+    simulation_proc = Process(target=simulation_process, args=(command_queue, response_dict, shutdown_event))
+    simulation_proc.start()
+
+    try:
+        app.run(debug=False, host='0.0.0.0', port=5500)
+    finally:
+        shutdown_event.set()
+        simulation_proc.join()
