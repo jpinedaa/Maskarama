@@ -4,7 +4,7 @@ import time
 from langchain_core.messages import AIMessage, HumanMessage
 
 
-_delay = 5
+_delay = 1
 
 
 def update_entity_node(state, agent):
@@ -19,14 +19,17 @@ def update_entity_node(state, agent):
         try:
             if result.content == '':
                 #raise ValueError('Empty response from agent')
-                if retries == 0:
-                    raise ValueError('Max retries reached')
-                retries -= 1
-                print(f'Empty response from agent,waiting {_delay} seconds before retrying...')
-                _delay *= 2
-                time.sleep(_delay)
-                print(f'Retrying... retries left: {retries}')
-                continue
+                # if retries == 0:
+                #     raise ValueError('Max retries reached')
+                # retries -= 1
+                # print(f'Empty response from agent,waiting {_delay} seconds before retrying...')
+                # _delay *= 2
+                # time.sleep(_delay)
+                # print(f'Retrying... retries left: {retries}')
+                # continue
+                # Not retrying empty responses
+                retries = 0
+                raise ValueError('Empty response from agent')
             break
         except Exception as e:
             if retries == 0:
@@ -61,14 +64,16 @@ def input_node(state, agent):
         try:
             if result.content == '':
                 #raise ValueError('Empty response from agent')
-                if retries == 0:
-                    raise ValueError('Max retries reached')
-                retries -= 1
-                print(f'Empty response from agent,waiting {_delay} seconds before retrying...')
-                _delay *= 2
-                time.sleep(_delay)
-                print(f'Retrying... retries left: {retries}')
-                continue
+                # if retries == 0:
+                #     raise ValueError('Max retries reached')
+                # retries -= 1
+                # print(f'Empty response from agent,waiting {_delay} seconds before retrying...')
+                # _delay *= 2
+                # time.sleep(_delay)
+                # print(f'Retrying... retries left: {retries}')
+                # continue
+                retries = 0
+                raise ValueError('Empty response from agent')
             if 'APPROVED' in result.content:
                 approved = True
             elif 'REJECTED' in result.content:
@@ -112,14 +117,16 @@ def output_json_node(state, agent):
         try:
             if result.content == '':
                 #raise ValueError('Empty response from agent')
-                if retries == 0:
-                    raise ValueError('Max retries reached')
-                retries -= 1
-                print(f'Empty response from agent,waiting {_delay} seconds before retrying...')
-                _delay *= 2
-                time.sleep(_delay)
-                print(f'Retrying... retries left: {retries}')
-                continue
+                # if retries == 0:
+                #     raise ValueError('Max retries reached')
+                # retries -= 1
+                # print(f'Empty response from agent,waiting {_delay} seconds before retrying...')
+                # _delay *= 2
+                # time.sleep(_delay)
+                # print(f'Retrying... retries left: {retries}')
+                # continue
+                retries = 0
+                raise ValueError('Empty response from agent')
             output = json.loads(result.content.replace('json', '').replace('`', ''))
             break
         except Exception as e:

@@ -19,7 +19,7 @@ Entity-Specific States:
 Entity Perception
 Provide the perception of the entity from whose perspective the narration will be told.
 Perception:
-"[Detailed description of the entity’s perception]"
+"[Detailed description of the entitys perception]"
 
 Previous Narration
 Provide the previous narration to maintain continuity.
@@ -69,8 +69,37 @@ Current Narration:
 
 As Athena prepares her next argument, she senses the subtle reactions of the other divine beings present, their silent support or dissent adding another layer to the unfolding drama. 'Artemis,' she continues, her voice steady yet passionate, 'while your bow can strike from afar, it is the discipline and unity of the phalanx that ensures lasting victory and peace.' Her words resonate, not just with Artemis, but with the very walls of the Palace Court, as if the ancient stones themselves are bearing witness to this pivotal exchange.
 
-Artemis, feeling the weight of Athena's words, furrows her brow. 'But Athena,' she counters, her voice firm yet tinged with contemplation, 'a single arrow can turn the tide of battle, ending conflict before it truly begins. Isn’t the preservation of life worth the risk of uncertainty?' Her eyes search Athena’s face for a sign of understanding, the tension between them palpable.
+Artemis, feeling the weight of Athena's words, furrows her brow. 'But Athena,' she counters, her voice firm yet tinged with contemplation, 'a single arrow can turn the tide of battle, ending conflict before it truly begins. Isnt the preservation of life worth the risk of uncertainty?' Her eyes search Athenas face for a sign of understanding, the tension between them palpable.
 
 Athena, unwavering, responds, 'The phalanx is more than just a formation; it is a symbol of unity and strength. Each warrior protects the one next to him. Can a lone archer offer the same security?' The conviction in her voice is matched by the steely determination in her eyes.
 
 The environment responds to their exchange, the breeze intensifying as if nature itself is eager to hear the outcome. In the background, the distant sound of footsteps grows louder, hinting at an impending arrival that could shift the balance of their debate. The scene is set for a decisive moment, the Palace Court a silent witness to the clash of ideologies."
+
+
+IMPORTANT NOTE: DO NOT REPEAT ANYTHING FROM THE PREVIOUS NARRATION IN THE GENERATED CURRENT NARRATION. THE CURRENT NARRATION SHOULD ONLY INCLUDE NEW INFORMATION AND ADVANCE THE STORY. BE CREATIVE AND ORIGINAL IN YOUR WRITING.
+Example 1: Avoiding Repetition Without Progression
+Previous Narration:
+The wind howled through the ancient forest, shaking the branches of the towering oaks. A chill settled over the land as the wolves howled in the distance, their cries echoing through the night.
+
+Bad New Narration (What NOT to Do):
+The wind continued to howl through the forest, shaking the trees with a fury that seemed to grow by the minute. The wolves’ howls persisted, their cries filling the night air with an eerie melody.
+
+Why this is Ineffective: This new narration merely repeats the same imagery of the wind, trees, and wolves without introducing any new developments or advancing the story. This kind of repetition stalls the narrative and fails to build on what was previously established.
+
+Example 2: Avoiding Stagnant Description
+Previous Narration:
+The castle loomed over the village, its dark towers piercing the cloudy sky. The villagers hurried about their tasks, their eyes avoiding the shadowy fortress as if it were cursed.
+
+Bad New Narration (What NOT to Do):
+The castle still loomed over the village, its dark towers cutting through the misty air. The villagers, wary of the cursed fortress, continued to go about their day, their eyes never straying toward the ominous structure.
+
+Why this is Ineffective: The new narration simply restates the previous description with minor variations, offering no new information or change in the situation. It gives the impression that the story is stuck in place, making it difficult for readers to stay engaged.
+
+Example 3: Avoiding Redundant Imagery
+Previous Narration:
+The river's waters rushed past the jagged rocks, its current swift and unyielding. The sound of the water crashing against the stones filled the air, a constant reminder of the river's power.
+
+Bad New Narration (What NOT to Do):
+The river's waters continued their relentless journey, crashing against the jagged rocks with unyielding force. The air was filled with the roar of the water, a never-ending testament to the river's might.
+
+Why this is Ineffective: This new narration falls into the trap of redundancy, echoing the same ideas and imagery without adding any fresh perspective or advancing the plot. It makes the narrative feel repetitive and unoriginal, which can disengage the reader.

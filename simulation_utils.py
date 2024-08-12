@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import traceback
 
 from agents import AgentState, InputAgentState
@@ -156,12 +157,19 @@ class Environment:
             self.update_all_entities_states()
         except Exception as e:
             print(f"Error updating all entities states: {traceback.format_exc()}")
-        for entity_name, entity in self.entities.items():
-            if entity.perception:
-                try:
-                    entity.update_character()
-                except Exception as e:
-                    print(f"Error updating entity {entity_name} character: {traceback.format_exc()}")
+        # create list of entity names with a randomized order
+        entity_names_rand = list(self.entities.keys())
+        random.shuffle(entity_names_rand)
+        count = 0
+        for entity_name in entity_names_rand:
+            if self.entities[entity_name].perception:
+                if count > 0:
+                    try:
+                        self.entities[entity_name].update_character()
+                    except Exception as e:
+                        print(f"Error updating entity {entity_name} character: {traceback.format_exc()}")
+                    break
+                count += 1
         try:
             self.update_all_entities_currentOutputs()
         except Exception as e:
@@ -210,7 +218,7 @@ class Environment:
         output = run_update_module(narrative_generation_graph, f"State: {self.state}\nPerception: "
                                                                     f"{perspective}- {self.entities[perspective].perception}\n"
                                                                     f"Previous Narrative: {self.narrative}\n", "Generate Narrative")
-        self.narrative += output["narrative"]
+        self.narrative = output["narrative"]
         if shared_dict:
             shared_dict["narrative"] = output["narrative"]
 

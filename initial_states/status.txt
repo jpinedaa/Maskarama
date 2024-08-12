@@ -1,5 +1,5 @@
 {
     "perspective": "poseidon01",
     "currentEnvironment": "throneRoom01",
-    "narration": []
+    "narration": ["The Throne Room of Mount Olympus is tense with divine conflict. Zeus and Poseidon are in a heated argument, their power struggle palpable. Hera watches coldly, harboring secret plans. Demeter observes with worry, while Hephaestus focuses on his crafting, seemingly oblivious to the discord. To influence this scene, type your command into the text box below. You can alter thoughts, trigger events, or manipulate the environment. Your input will shape the unfolding drama in this godly realm."]
 }

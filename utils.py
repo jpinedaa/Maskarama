@@ -41,12 +41,12 @@ def get_model(json_output=False):
     if not json_output:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
                                       safety_settings=disable_filters,
-                                      temperature=0.3
+                                      temperature=0.5
                                      )
     else:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
                                       safety_settings=disable_filters,
-                                      temperature=0.3,
+                                      temperature=0.5,
                                     generation_config={"response_mime_type": "application/json"})
     return llm
 
@@ -96,23 +96,19 @@ def clean_file(input_file, output_file):
     with open(input_file, 'r', encoding='utf-8', errors='ignore') as file:
         text = file.read()
 
-    # Remove control characters
-    text = ''.join(ch for ch in text if unicodedata.category(ch)[0] != 'C')
-
-    # Replace multiple spaces with a single space
-    text = re.sub(r'\s+', ' ', text)
+    # Remove control characters except for newline (\n) and carriage return (\r)
+    text = ''.join(ch for ch in text if unicodedata.category(ch)[0] != 'C' or ch in ('\n', '\r'))
 
     # Remove non-ASCII characters
     text = re.sub(r'[^\x00-\x7F]+', '', text)
-
-    # Strip leading/trailing whitespace
-    text = text.strip()
 
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write(text)
 
 
-if __name__ == '__file__':
-    input_file = 'path/to/input/file.txt'
-    output_file = 'path/to/output/file.txt'
-    clean_file(input_file, output_file)
+if __name__ == '__main__':
+    dir = os.path.join(base_dir, "initial_states")
+    for file in os.listdir(dir):
+        if file.endswith(".txt"):
+            print(f"Cleaning file: {file}")
+            clean_file(os.path.join(dir, file), os.path.join(dir, file))

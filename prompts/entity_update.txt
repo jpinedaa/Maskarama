@@ -8,7 +8,7 @@ Entity: [EntityName]
 State:
 "[Detailed description of the current state of the entity]"
 New Inputs
-Describe the new sensory inputs that update the entity’s current state. Highlight changes in the environment and interactions.
+Describe the new sensory inputs that update the entitys current state. Highlight changes in the environment and interactions.
 New Inputs:
 "[Detailed description of new sensory inputs relevant to the entity]"
 
@@ -30,7 +30,7 @@ Importance of Entity State:
 Guide to Writing Entity Descriptions
 "
 Defining the Physical State:
-- Detail Physical Characteristics: Clearly describe the entity’s physical features, such as size, color, material, and any distinctive attributes (e.g., wear, damage, or unique craftsmanship).
+- Detail Physical Characteristics: Clearly describe the entitys physical features, such as size, color, material, and any distinctive attributes (e.g., wear, damage, or unique craftsmanship).
 - Condition: Note the current condition of the entity (new, aged, broken, etc.), including any aspects that affect its appearance or functionality.
 - Static or Dynamic State: For statues or inanimate objects, mention if they are static. For living entities or machines, describe their dynamic state if applicable.
 
@@ -41,7 +41,7 @@ Specifying Inputs:
 
 Describing Current Output:
 - Actions or Outputs: Specify the current output or action of the entity. For static objects, this might be their influence on the environment or the perceptions they evoke. For active entities, describe their interactions or movements.
-- Interaction with Environment: Mention how the entity’s output affects or interacts with its surroundings, even if it’s just altering visual perspectives or creating a focal point.
+- Interaction with Environment: Mention how the entitys output affects or interacts with its surroundings, even if its just altering visual perspectives or creating a focal point.
 
 
 Practical Steps for Writing
@@ -66,7 +66,7 @@ New Inputs:
 
 Updating the State
 Update Process:
-The new inputs enhance Athena’s existing state by adding layers of sensory perception and physical awareness. The noise from the door heightens her alertness, signaling potential changes in her environment. Her focused observation of Artemis indicates her active engagement in their ongoing debate. The physical sensations of her armor and spear, combined with the increased temperature, enrich her sensory experience without compromising her divine form. These updates reflect the changes and observations made in the time since the last state update.
+The new inputs enhance Athenas existing state by adding layers of sensory perception and physical awareness. The noise from the door heightens her alertness, signaling potential changes in her environment. Her focused observation of Artemis indicates her active engagement in their ongoing debate. The physical sensations of her armor and spear, combined with the increased temperature, enrich her sensory experience without compromising her divine form. These updates reflect the changes and observations made in the time since the last state update.
 
 Updated State
 Updated State:
@@ -74,7 +74,7 @@ Updated State:
 
 Importance of Entity State
 Importance of Entity State:
-Athena’s updated state captures her dynamic interaction with the environment and other characters, enhancing the narrative depth of the simulation. It underscores her role as a central figure, embodying both physical prowess and divine perception. By maintaining a detailed and accurate state, Athena's presence and actions remain consistent and impactful within the simulation, contributing to the richness of the narrative experience.
+Athenas updated state captures her dynamic interaction with the environment and other characters, enhancing the narrative depth of the simulation. It underscores her role as a central figure, embodying both physical prowess and divine perception. By maintaining a detailed and accurate state, Athena's presence and actions remain consistent and impactful within the simulation, contributing to the richness of the narrative experience.
 
 Notes:
 * Keep outputs appropriate for all ages and audiences. Be creative and have fun with the prompt!

@@ -73,7 +73,7 @@ Exit Entities:
 Processing the User Request
 
 Evaluation of User Request
-The user requests the disappearance of a physical object within the current environment—the column Athena is leaning on. This change directly affects the physical state of the environment and can be accommodated.
+The user requests the disappearance of a physical object within the current environmentthe column Athena is leaning on. This change directly affects the physical state of the environment and can be accommodated.
 
 Outcome
 

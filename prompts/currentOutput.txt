@@ -9,19 +9,19 @@ State:
 "[Detailed description of the updated state of the entity]"
 
 Inputs
-Describe the sensory inputs that have been integrated into the entity’s current state.
+Describe the sensory inputs that have been integrated into the entitys current state.
 Inputs:
 "[Detailed description of sensory inputs relevant to the entity]"
 
 Updated Perception
-Describe the entity’s updated perception based on the new state and inputs.
+Describe the entitys updated perception based on the new state and inputs.
 Perception:
-"[Detailed description of the entity’s updated perception]"
+"[Detailed description of the entitys updated perception]"
 
 Generating the Current Output
 Based on the updated state, inputs, and perception, describe the physical actions or outputs of the entity.
 Current Output:
-"[Detailed physical description of the entity’s current action or output]"
+"[Detailed physical description of the entitys current action or output]"
 
 
 Example: Athena (This is just for example reference, be original)
