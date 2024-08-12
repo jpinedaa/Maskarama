@@ -1,4 +1,30 @@
+## Table of Contents
 
+1. [Installation and Usage](#installation-and-usage)
+   - [Prerequisites](#prerequisites)
+   - [Installation Steps](#installation-steps)
+     1. [Clone the Repository](#clone-the-repository)
+     2. [Set Up the Backend](#set-up-the-backend)
+     3. [Set Up the Frontend](#set-up-the-frontend)
+   - [Summary](#summary)
+   
+2. [Development Process](#development-process)
+   - [Vision and Concept](#vision-and-concept)
+   - [Simulation Details](#simulation-details)
+     - [Flow of the Simulation](#flow-of-the-simulation)
+     - [Memory and Perception](#memory-and-perception)
+   - [The Role of Gemini API](#the-role-of-gemini-api)
+   - [Design Process](#design-process)
+     - [UI/UX Design](#uiux-design)
+     - [Wireframes](#wireframes)
+     - [Accessibility Features](#accessibility-features)
+   - [Simulation Diagram and Memory Diagram](#simulation-diagram-and-memory-diagram)
+   
+3. [Roadmap](#roadmap)
+   - [Completed Features](#completed-features)
+   - [Incomplete Features](#incomplete-features)
+   - [Optimization Challenges](#optimization-challenges)
+   - [Gratitude](#gratitude)
 
 ## Installation and Usage
 
@@ -160,3 +186,33 @@ Early wireframes focused on the flow of information and the ease of interaction.
 ### Summary
 
 Once both the backend and frontend servers are running, you can interact with the Maskarama application through your web browser. The backend handles the core logic and simulation, while the frontend provides the user interface for interacting with the game. This setup has been tested and works on Windows.
+
+## Roadmap
+
+As part of our submission to the developer competition, we focused on implementing the core aspects of **Maskarama**. While we successfully completed many of the foundational features, there were some ambitious elements we were unable to finalize before the deadline. Below is a summary of what was achieved and what remains on our development roadmap.
+
+![Screenshot 2024-08-12 151536](https://github.com/user-attachments/assets/ee183141-8a71-4de7-ab23-e41dd1995a1c)
+
+### Completed Features
+
+- **Simulation Framework:** The core turn-based simulation engine was implemented, allowing for the complex interactions between characters, objects, and environments.
+- **Memory Storage and Retrieval:** Each character’s memory is managed using a Neo4j-based knowledge graph, with memory retrieval and updates powered by the Gemini API. This ensures that each character’s perceptions and decisions are influenced by their unique past experiences.
+- **Main Narration UI:** The main UI panel for narrative generation is operational, displaying the evolving story based on player inputs and the simulation's state.
+- **User Input Handling:** The game successfully processes player inputs, allowing users to influence the simulation through various god-like actions.
+- **Visual Representation:** Visuals for all characters, objects, and rooms are displayed, providing a clear view of the game world.
+- **Stylized Map:** A stylized map was created to give players an overview of the environments and their connections.
+
+### Incomplete Features
+
+- **Detailed Character, Object, and Environment Information:** While the backend handles detailed internal simulation data (such as states, perceptions, and memories), this information is not yet fully integrated into the frontend UI.
+- **Character Perspective Selection:** The ability to select a character and change the perspective of the narration is implemented in the backend, but the frontend UI for this feature is still under development.
+- **Multiple Turn Simulation:** The backend supports simulating multiple turns in a row, but the frontend interface to trigger this functionality is not yet complete.
+
+### Optimization Challenges
+
+- **Performance:** The current simulation framework, while functional, is not fully optimized. Each turn involves numerous complex steps, leading to longer processing times. This is an area we plan to address in future updates.
+- **Prompt Engineering:** Due to time constraints, there was limited opportunity to refine the prompt engineering for the various simulation steps. As a result, the output quality has room for improvement, which we aim to enhance with further development.
+
+### Gratitude
+
+We would like to extend our sincere thanks to Google for the opportunity to participate in this competition and for providing the incredible **Gemini API**. The Gemini API has been instrumental in bringing our vision to life, enabling us to execute complex tasks such as managing character memories and generating dynamic narratives. Despite the challenges, the Gemini API has proven to be a powerful tool that allows us to turn imagination into reality, and we look forward to continuing our work with it as we further develop **Maskarama**.
