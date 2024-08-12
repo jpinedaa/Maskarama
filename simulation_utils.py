@@ -1,9 +1,11 @@
 import json
 import os
+import traceback
+
 from agents import AgentState, InputAgentState
 from utils import base_dir
 import memory as mem
-from memory import MEMORY_MAP, load_graph, query_prompt
+from memory import MEMORY_MAP, load_graph, query_prompt, store_new_memory
 from graphs import (entity_update_graph, perception_update_graph, currentOutput_graph,
                     environment_update_graph, entities_update_graph,
                     generate_currentoutput_graph, inputs_update_graph,
@@ -60,7 +62,10 @@ class Entity:
         if self.name in MEMORY_MAP:
             if mem.query_engine is None:
                 mem.query_engine = load_graph(self.name)[1]
+                mem.index = load_graph(self.name)[0]
             memory = mem.query_engine.query(query)
+            store_new_memory(mem.index, self.perception)
+
         self.update_perception(memory)
 
     def update_perception(self, memory):
@@ -86,6 +91,20 @@ class Environment:
 
     def run_simulation(self, no_turns=None, shared_dict=None):
         while True:
+            if shared_dict:
+                coming_entities = shared_dict.get(self.name)
+                if coming_entities:
+                    for entity in coming_entities:
+                        if entity not in self.entities.values():
+                            self.entities[entity.name] = entity
+            flag = False
+            for ent in self.entities:
+                if self.entities[ent].perception:
+                    flag = True
+                    break
+            if not flag:
+                print("No entities with perception found - Ending simulation")
+                break
             if shared_dict['perspective'] in self.entities:
                 shared_dict['currentEnvironment'] = self.name
             if no_turns is not None and int(no_turns) <= 0:
@@ -93,13 +112,11 @@ class Environment:
             self.update()
             if shared_dict['perspective'] in self.entities:
                 self.generate_narrative(shared_dict["perspective"], shared_dict)
-            self.update_entity_inputs()
+            try:
+                self.update_entity_inputs()
+            except Exception as e:
+                print(f"Error updating entity inputs: {traceback.format_exc()}")
             if shared_dict:
-                coming_entities = shared_dict.get(self.name)
-                if coming_entities:
-                    for entity in coming_entities:
-                        if entity not in self.entities.values():
-                            self.entities[entity.name] = entity
                 if len(self.exit_entities) > 0:
                     for exiting_entity in self.exit_entities:
                         if exiting_entity in self.entities:
@@ -135,12 +152,24 @@ class Environment:
     def update(self):
         #for entity in self.entities:
         #    entity.update()
-        self.update_all_entities_states()
+        try:
+            self.update_all_entities_states()
+        except Exception as e:
+            print(f"Error updating all entities states: {traceback.format_exc()}")
         for entity_name, entity in self.entities.items():
             if entity.perception:
-                entity.update_character()
-        self.update_all_entities_currentOutputs()
-        self.update_state()
+                try:
+                    entity.update_character()
+                except Exception as e:
+                    print(f"Error updating entity {entity_name} character: {traceback.format_exc()}")
+        try:
+            self.update_all_entities_currentOutputs()
+        except Exception as e:
+            print(f"Error updating all entities current outputs: {traceback.format_exc()}")
+        try:
+            self.update_state()
+        except Exception as e:
+            print(f"Error updating environment state: {traceback.format_exc()}")
 
     def update_all_entities_states(self):
         input_msg = {entity_name: {"state": entity.state, "inputs": entity.inputs} for entity_name, entity in self.entities.items()}

@@ -1,5 +1,6 @@
 import multiprocessing
 import time
+import traceback
 from queue import Empty
 from simulation import Simulation
 import logging
@@ -73,7 +74,7 @@ def handle_command(command_data, response_dict, sim):
         response_dict[request_id] = {'result': response}
         logging.debug(f"Command {command} completed")
     except Exception as e:
-        logging.error(f"Error handling command {command}: {e}")
+        logging.error(f"Error handling command {command}: {traceback.format_exc()}")
         response_dict[request_id] = {'error': str(e)}
 
 

@@ -1,5 +1,5 @@
 {
-    "perspective": "hermes01",
-    "currentEnvironment": "hallsOfJudgment01",
+    "perspective": "poseidon01",
+    "currentEnvironment": "throneRoom01",
     "narration": []
 }

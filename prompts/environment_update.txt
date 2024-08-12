@@ -1,4 +1,4 @@
-Objective: Update the environment's overall state, entity-specific states, boundaries, and exit entities using the previous overall state, previous entity-specific states, previous boundaries, previous exit entities, and the new current outputs of the entities. Consider that two minutes have passed since the last update.
+Objective: Update the environment's overall state, entity-specific states, boundaries, and exit entities using the previous overall state, previous entity-specific states, previous boundaries, previous exit entities, and the new current outputs of the entities. Consider that time have passed since the last update.
 
 
 General Instructions
@@ -24,9 +24,10 @@ Boundaries:
   TransitionCondition: "[Condition]"
 
 Previous Exit Entities
-List the entities that exited in the previous state with the boundary through which they exited from, meaning they should not appear in the current entity-specific states.
+List the entities that exited in the previous state, meaning they should not appear in the current entity-specific states.
+
 Exit Entities:
-- Entity: {EntityName3: BoundaryName2}
+- Entity: [EntityName3]
 
 New Current Outputs of Entities
 Describe the new current outputs of the entities based on their updated states and perceptions.
@@ -38,9 +39,9 @@ Current Outputs:
   Output: "[Detailed description of the current output of the entity]"
 
 Updating the Environment
-Explain how the new current outputs will be used to update the environment's overall state, entity-specific states, boundaries, and exit entities, considering the passage of two minutes. Ensure entities listed in the exit entities do not appear in the updated entity-specific states.
+Explain how the new current outputs will be used to update the environment's overall state, entity-specific states, boundaries, and exit entities, considering the passage of time. Ensure entities listed in the exit entities do not appear in the updated entity-specific states.
 Update Process:
-"[Explanation of how the current outputs enhance and integrate with the previous overall state, entity-specific states, boundaries, and exit entities, reflecting the changes and observations made in the two minutes since the last update]"
+"[Explanation of how the current outputs enhance and integrate with the previous overall state, entity-specific states, boundaries, and exit entities, reflecting the changes and observations made in the time since the last update]"
 
 Updated Overall State
 Provide the updated overall state of the environment.
@@ -68,8 +69,8 @@ Updated Exit Entities:
 - Entity: [EntityName4] (if any entity has exited)
 
 
-Example: Athena and the Palace Court
-
+Example: Athena and the Palace Court (This is just for example reference, be original)
+"
 Previous Overall State
 Overall State:
 "The Palace Court is a grand hall with marble floors, tall columns, and high arched windows letting in streams of sunlight. The hall is filled with a sense of order and tranquility, with the presence of divine beings adding to its majestic ambiance."
@@ -101,7 +102,7 @@ Current Outputs:
 
 Updating the Environment
 Update Process:
-The current outputs of Athena and Artemis reflect their ongoing debate and physical movements within the Palace Court. Athena's authoritative declaration and step forward emphasize her strategic stance, while Artemis's reaction adds tension to the environment. The updated state of the Palace Court should reflect these interactions and changes in the entities' positions and actions over the past two minutes. No entities have exited the environment during this period.
+The current outputs of Athena and Artemis reflect their ongoing debate and physical movements within the Palace Court. Athena's authoritative declaration and step forward emphasize her strategic stance, while Artemis's reaction adds tension to the environment. The updated state of the Palace Court should reflect these interactions and changes in the entities' positions and actions over the past time. No entities have exited the environment during this period.
 
 Updated Overall State
 Updated Overall State:
@@ -124,3 +125,8 @@ Updated Boundaries:
 Updated Exit Entities
 Updated Exit Entities:
 (Empty, as no new entities have exited)
+"
+
+Notes:
+* Keep outputs appropriate for all ages and audiences. Be creative and have fun with the prompt!
+* The format for the ID's of the entities and environments is the first word in lowercase and the rest of the words in uppercase and the number at the end. For example: athena01 or palaceCourt01

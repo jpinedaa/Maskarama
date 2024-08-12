@@ -137,3 +137,7 @@ Outcome
 
 REJECTED
 Feedback: "Poseidon is not present in the Palace Court, and there is no garden connected to this space. The request cannot be fulfilled as it involves interacting with entities and locations outside the current environment. Please make requests that involve the entities currently within the Palace Court, such as Athena, Artemis, or Hermes, or actions that take place within the Court itself."
+
+Notes:
+* Keep outputs appropriate for all ages and audiences. Be creative and have fun with the prompt!
+* The format for the ID's of the entities and environments is the first word in lowercase and the rest of the words in uppercase and the number at the end. For example: athena01 or palaceCourt01

@@ -1,78 +1,84 @@
-Objective: Generate new inputs for each entity in the environment based on the environment's overall state, entity-specific states, and boundaries. Consider that two minutes have passed since the last update. Inputs reflect the physical "signals" affecting each entity.
+Objective: Generate new inputs for each entity in the environment based on the environment's overall state, entity-specific states, and boundaries. Inputs reflect the physical "signals" affecting each entity.
 
 General Instructions
 Environment Overall State
 
 Provide the overall state of the environment.
 
-arduino
-Copy code
 Overall State:
-"[Detailed description of the overall state of the environment]"
+"[Summarized description of the overall state of the environment]"
 Entity-Specific States
 
 Provide the states of all entities within the environment.
 
-mathematica
-Copy code
+
 Entity-Specific States:
 - Entity: [EntityName1]
   State: "[Detailed description of the state of the entity]"
 
 - Entity: [EntityName2]
   State: "[Detailed description of the state of the entity]"
+
 Boundaries
 
 Describe the boundaries of the environment using the ConnectedEnvironmentID and TransitionCondition.
 
-makefile
-Copy code
 Boundaries:
 - ConnectedEnvironmentID: "[EnvironmentID]"
   TransitionCondition: "[Condition]"
+
+
 Generating New Inputs
 
-Based on the environment's overall state, entity-specific states, and boundaries, generate new inputs for each entity. Inputs should reflect the physical "signals" affecting each entity over the past two minutes.
+Based on the environment's overall state, entity-specific states, and boundaries, generate new inputs for each entity. Inputs should reflect the physical "signals" affecting each entity.
 
-yaml
-Copy code
+When Generating new Inputs consider:
+- Trigger Unexpected/ new/ interesting/ normal Events but nothing too out of this world (Example (just for reference): Add surprising events like an unexpected visitor entering the scene, an ancient artifact activating, or a sudden shift in the atmosphere that affects the entities' perceptions and actions.)
+- Create Inter-entity Interactions (Generate inputs that lead to interactions between entities, such as one character initiating a physical action (e.g., Artemis drawing her bow further) or verbal exchange (e.g., Athena questioning Artemis's strategy)
+- Incorporate Emotional and Psychological Triggers for animate entities (Introduce inputs that trigger emotional or psychological responses, such as a memory flashback, a sudden realization, or an internal conflict, driving the entity to act or think differently.)
+- Advance the Narrative with New Goals or Information (Provide inputs that present new objectives or reveal critical information. Example (just for reference) like a message from another god, a vision of the future, or the discovery of a hidden truth that changes the course of the debate.)
+
+
 New Inputs:
 - Entity: [EntityName1]
   Inputs: "[Detailed description of new inputs for the entity]"
 
 - Entity: [EntityName2]
   Inputs: "[Detailed description of new inputs for the entity]"
-Example: Athena and the Palace Court
+
+
+
+Example: Athena and the Palace Court (This is just for example reference, be original)
+
 Environment Overall State
 
-less
-Copy code
+
 Overall State:
 "The Palace Court remains a grand hall filled with sunlight and a sense of divine presence. The atmosphere has grown more intense with the ongoing debate between Athena and Artemis, their movements and declarations adding a dynamic tension to the majestic tranquility of the hall."
 Entity-Specific States
 
-mathematica
-Copy code
 Entity-Specific States:
 - Entity: Athena
   State: "Athena stands firm in the Palace Court, her divine stature unwavering. She raises her spear slightly, the bronze tip catching the light, and takes a step forward, her armor clinking softly. Her gaze remains fixed on Artemis as she declares, 'Spears and shields maintain order and defense in battle.'"
 
 - Entity: Artemis
   State: "Artemis stands in the Palace Court, engaged in a debate with Athena. She takes a step back, her expression resolute and her bow raised slightly, the tension evident in her stance."
+
 Boundaries
 
-makefile
-Copy code
 Boundaries:
 - ConnectedEnvironmentID: "throneRoom01"
   TransitionCondition: "Through the grand archway"
 Generating New Inputs
 
-yaml
-Copy code
 New Inputs:
 - Entity: Athena
-  Inputs: "Athena hears Artemis's reply, 'Bows offer swift victory and save lives,' delivered with passion. She feels the cool breeze coming through the grand archway, a contrast to the rising temperature under her armor. The light from the windows shifts slightly, casting different patterns on her bronze armor."
+  Inputs: "Athena hears the passionate reply from Artemis and understands that being right should not always be the only answer, our passion and belief might affect the outcome no matter how dire the stiatuion is"
 
 - Entity: Artemis
-  Inputs: "Artemis hears Athena's authoritative declaration, 'Spears and shields maintain order and defense in battle,' resonating through the hall. She feels the tension in her muscles as she maintains her stance, her fingers gripping the bow tighter. The light from the windows highlights Athena's figure, creating an imposing silhouette that adds weight to her words."
+  Inputs: "She looks at Athena in deep thought, she wonders what she is thinking."
+
+
+Notes:
+* Keep outputs appropriate for all ages and audiences. Be creative and have fun with the prompt!
+* The format for the ID's of the entities and environments is the first word in lowercase and the rest of the words in uppercase and the number at the end. For example: athena01 or palaceCourt01

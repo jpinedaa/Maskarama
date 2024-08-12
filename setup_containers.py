@@ -192,8 +192,50 @@ def setup_memory_containers():
             restart_container(client, container_name)
 
 
+def create_memory_containers():
+    client = docker.from_env(timeout=600)
+    for container_name, port in MEMORY_MAP.items():
+        try:
+            print(f"Creating container {container_name} on port {port}...")
+            container = client.containers.run(
+                'neo4j:latest',
+                name=container_name,
+                detach=True,
+                ports={'7687/tcp': port},
+                environment={
+                    'NEO4J_apoc_export_file_enabled': 'true',
+                    'NEO4J_apoc_import_file_enabled': 'true',
+                    'NEO4J_apoc_import_file_useneo4jconfig': 'true',
+                    'NEO4J_AUTH': 'neo4j/password',
+                    'NEO4J_PLUGINS': '["apoc"]'
+                }
+            )
+            print(f"Container {container_name} created successfully.")
+        except docker.errors.APIError as e:
+            print(f"An error occurred while creating container {container_name}: {e}")
+
+
+def export_all_containers():
+    """
+    Export all containers listed in the MEMORY_MAP to dump files.
+    """
+    containers_dir = os.path.join(base_dir, "memory_containers")
+
+    # Ensure the containers directory exists
+    os.makedirs(containers_dir, exist_ok=True)
+
+    for container_name in MEMORY_MAP.keys():
+        export_path = os.path.join(containers_dir, f"{container_name}.dump.tar")
+        print(f"Exporting container {container_name}...")
+        export_database(container_name, export_path)
+        print(f"Export of {container_name} completed.")
+
+    print("All containers have been exported successfully.")
+
 
 if __name__ == '__main__':
-    character = 'athena01'
+    #character = 'athena01'
     #export_database(character, os.path.join(base_dir, "memory_containers", f"{character}.dump.tar"))
-    setup_memory_containers()
+    #setup_memory_containers()
+    #create_memory_containers()
+    export_all_containers()

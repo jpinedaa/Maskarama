@@ -3,7 +3,9 @@ import os
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph
-import io
+import re
+import unicodedata
+#import io
 #from tkinter import Image
 
 
@@ -39,11 +41,13 @@ def get_model(json_output=False):
     if not json_output:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
                                       safety_settings=disable_filters,
-                                      temperature=0)
+                                      temperature=0.3
+                                     )
     else:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
                                       safety_settings=disable_filters,
-                                      temperature=0, generation_config={"response_mime_type": "application/json"})
+                                      temperature=0.3,
+                                    generation_config={"response_mime_type": "application/json"})
     return llm
 
 
@@ -86,3 +90,29 @@ def build_graph(state_class, nodes, edges, entry_point):
     # show_graph(graph)
 
     return graph
+
+
+def clean_file(input_file, output_file):
+    with open(input_file, 'r', encoding='utf-8', errors='ignore') as file:
+        text = file.read()
+
+    # Remove control characters
+    text = ''.join(ch for ch in text if unicodedata.category(ch)[0] != 'C')
+
+    # Replace multiple spaces with a single space
+    text = re.sub(r'\s+', ' ', text)
+
+    # Remove non-ASCII characters
+    text = re.sub(r'[^\x00-\x7F]+', '', text)
+
+    # Strip leading/trailing whitespace
+    text = text.strip()
+
+    with open(output_file, 'w', encoding='utf-8') as file:
+        file.write(text)
+
+
+if __name__ == '__file__':
+    input_file = 'path/to/input/file.txt'
+    output_file = 'path/to/output/file.txt'
+    clean_file(input_file, output_file)

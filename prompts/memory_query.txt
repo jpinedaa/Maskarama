@@ -1,1 +1,3 @@
 The following text provided represents the "perception" or "awareness" of the character at the current moment of the story, it includes her sense of ego (who they think they are) and how it interprets what is currently happening to them. The graph database represents their memories as a character. What memory might comes up to them based on their perception that would update their perception? Here is the perception: "PERCEPTION" Be specific on the memory and to what part of the perception is related to exactly?
+
+Note: Keep outputs appropriate for all ages and audiences. Be creative and have fun with the prompt!

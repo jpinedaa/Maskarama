@@ -24,7 +24,7 @@ Current Output:
 "[Detailed physical description of the entity’s current action or output]"
 
 
-Example: Athena
+Example: Athena (This is just for example reference, be original)
 
 Updated State
 Entity: Athena
@@ -42,3 +42,7 @@ Perception:
 Generating the Current Output
 Current Output:
 "Athena raises her spear slightly, the bronze tip catching the light and casting a glint across the hall. She takes a step forward, her armor clinking softly with the movement, and declares in a commanding voice, 'Spears and shields maintain order and defense in battle.' Her gaze remains fixed on Artemis as she speaks, her posture exuding unwavering confidence and authority."
+
+Notes:
+* Keep outputs appropriate for all ages and audiences. Be creative and have fun with the prompt!
+* The format for the ID's of the entities and environments is the first word in lowercase and the rest of the words in uppercase and the number at the end. For example: athena01 or palaceCourt01
