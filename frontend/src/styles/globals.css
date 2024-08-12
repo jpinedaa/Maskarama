@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.fade-mask {
+    position: relative;
+    overflow: hidden;
+  }
+  .fade-mask::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgb(53, 38, 35) 0%,
+      rgba(53, 38, 35, 0.9) 7%,
+      rgba(53, 38, 35, 0.7) 15%,
+      rgba(53, 38, 35, 0.3) 30%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+  .scroll-content {
+    max-height: 100%;
+    overflow-y: auto;
+  }
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .custom-scrollbar {
+    /* Move scrollbar 5% to the left */
+    padding-right: calc(5% + 10px); /* 10px is an estimate for the scrollbar width */
+    margin-right: -5%;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #915820;
+    border-radius: 5px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 5px;
+  }
+  
+  /* For Firefox */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: white #915820;
+  }

@@ -1,0 +1,265 @@
+{
+  "throneRoom01": {
+    "name": "Throne Room",
+    "entities": [
+      "zeus01",
+      "poseidon01",
+      "hera01",
+      "hephaestus01",
+      "demeter01",
+      "throne01",
+      "table01",
+      "chest01",
+      "amphora01"
+    ],
+
+"boundaries": [{
+      "ConnectedEnvironmentID": "libraryAthena01",
+      "TransitionCondition": "Through the north door"
+    },
+      {
+      "ConnectedEnvironmentID": "forgeOfHephaestus01",
+      "TransitionCondition": "Through the north-west door"
+    },
+        {
+        "ConnectedEnvironmentID": "bathhouseAphrodite01",
+        "TransitionCondition": "Through the east door"
+        },
+        {
+        "ConnectedEnvironmentID": "hearthHestia01",
+        "TransitionCondition": "Through the north-east door"
+        },
+        {
+        "ConnectedEnvironmentID": "armoryAres01",
+        "TransitionCondition": "Through the west door"
+        },
+        {
+        "ConnectedEnvironmentID": "gardenOfDemeter01",
+        "TransitionCondition": "Through the south exit"
+        },
+  {
+    "ConnectedEnvironmentID": "hermesQuarters01",
+    "TransitionCondition": "Through the south-east door"
+  }
+],
+
+    "state": {
+        "OverallState": "The Throne Room of Mount Olympus is a place of immense grandeur, yet it thrums with underlying tension. The room is expansive, dominated by towering marble columns veined with gold that reach up to support a domed ceiling, painted with scenes of divine victories. The light filters through tall, arched windows, casting intricate patterns across the polished marble floor, which is inlaid with an intricate mosaic that mimics the swirling waves of the sea, accented by deep emerald tones. At the room's center, Zeus's grand golden throne commands attention, its eagle motifs and lightning bolt carvings symbolizing his ultimate authority. Surrounding it, in a semicircle, are the thrones of the other gods, each reflecting their distinct domains—Poseidon's throne of coral and seashells, Athena’s polished bronze seat with owl engravings, and Aphrodite's ivory chair inlaid with delicate rose patterns. Decorations and objects further emphasize the room's divine opulence. A large marble table, intricately carved with mythological scenes, stands ready for council gatherings. A massive tapestry depicting the epic Battle of the Titans hangs along the back wall, its golden and crimson threads capturing the light, serving as a dramatic backdrop. Nearby, a polished bronze shield engraved with a gorgon’s image glimmers with a menacing beauty, while an ornate chest with gilded edges beside Hera’s throne hints at hidden plots. The atmosphere is thick with the scent of myrrh and olives, mixed with the subtle perfume of pomegranates. A bronze brazier flickers with a warm, steady flame near Hestia, while a sculpted fountain in the shape of a coiled serpent adds a soft, calming sound to the tense air. On a low marble bench, a golden lyre hums faintly, its resonance adding a quiet note of harmony amidst the discord.",
+      "EntitySpecificStates": {
+        "zeus01": "Zeus, seated on his grand throne of gleaming gold, his deep-set eyes crackling with barely restrained lightning, grips the armrests with thick, powerful hands. His bearded face is set in a stern scowl as he leans forward, his voice booming across the room, 'You dare challenge my decree, brother?' The room seems to pulse with his authority, the air around him charged as if on the brink of a storm.",
+        "poseidon01": "Poseidon stands tall and unyielding before Zeus, his trident planted firmly on the floor, the tips faintly glowing with seafoam. His dark green robes, trimmed with silver, ripple as if moved by an unseen tide. His deep blue eyes glare with defiance as he retorts, 'The sea does not bow to the sky, Zeus. Your words hold no sway over the depths.'",
+        "hera01": "Hera, seated beside an ornate chest with gilded edges, watches Zeus with cold eyes. Her regal composure masks the silent plotting within her. Every so often, she glances at the chest beside her, which holds a powerful artifact she has acquired in secret. Her thoughts are focused on the future, contemplating how she and Hephaestus might use it to bring about Zeus’s downfall.",
+        "demeter01": "Demeter, draped in robes of rich green and gold, stands quietly to the side, her hands gently clasped in front of her. Her brown eyes are filled with concern as she watches the growing discord among the gods. The faint scent of earth and grain seems to cling to her presence, a reminder of the life she nurtures. 'This strife bodes ill for the harvest,' she whispers, her voice tinged with worry.",
+        "hephaestus01": "Hephaestus, his muscular frame bent over a small piece of metalwork, works meticulously with a small hammer and chisel. His face half-hidden by a thick beard and wild dark hair is focused entirely on the task at hand, ignoring the heated exchanges around him. 'It will be done,' he mutters to himself, his voice low and determined as the glint of his creation catches the light briefly.",
+        "throne01": "In the center of the room, Zeus's grand golden throne dominates the space. Adorned with eagle motifs and lightning bolt carvings, the throne is draped with deep purple fabric. Positioned as the focal point of the room, it symbolizes Zeus’s authority and power, casting an imposing presence over all who enter.",
+        "table01": "A large marble table intricately carved with mythological scenes stands near the center of the room, serving as a place for council gatherings. The table’s surface reflects the light from above, its detailed carvings of gods and titans adding to the room's grandeur.",
+        "chest01": "Beside Hera’s throne, an ornate chest with gilded edges sits closed, its contents hidden from view. The chest’s intricate designs hint at its importance, drawing subtle attention to the schemes brewing in the room.",
+        "amphora01": "Near the marble table, a tall slender amphora filled with ambrosia stands on a small pedestal. Painted with scenes of divine feasts, the amphora’s presence reinforces the luxury and immortality of the gods."
+      }
+    }
+  },
+
+  "libraryAthena01": {
+    "name": "Library of Athena",
+    "entities": [
+      "athena01",
+      "hermes01",
+      "oakTable01",
+      "stainedGlass01",
+      "astrolabe01"
+    ],
+
+"boundaries": [{
+      "ConnectedEnvironmentID": "throneRoom01",
+      "TransitionCondition": "Through the south door"
+    }],
+
+    "state": {
+      "OverallState": "The Library of Athena is a grand hall filled with towering shelves of scrolls and ancient texts, bathed in soft golden light filtering through stained glass windows. The atmosphere is one of quiet contemplation and intense focus, as the room is dedicated to knowledge and strategy. The air is thick with the scent of aged parchment and the wisdom of centuries.",
+
+      "EntitySpecificStates": {
+        "athena01": "Athena, clad in detailed bronze armor with a plumed helmet, stands by the large oak table. Her sharp gray eyes and brown hair styled into a bun reflect her focused and calculating nature. She holds a rolled scroll in her left hand, her gaze steady and thoughtful as she strategizes 'We must act with precision Hermes. Knowledge and timing are our greatest weapons.' The soft light filtering through the stained glass windows illuminates her figure, emphasizing her role as the goddess of wisdom and war.",
+        "hermes01": "Hermes, in his characteristic winged sandals and a short white chiton, stands near the oak table, pacing with an air of urgency. His golden caduceus rests lightly on his shoulder as he listens intently to Athena, his eyes darting between the scrolls and maps. 'The message is clear Athena,' he responds, his voice a mix of urgency and composure. 'We need to move swiftly if we're to outmaneuver them.'",
+        "oakTable01": "In the center of the library, a large ornately carved oak table dominates the space. The table is engraved with intricate battle formations and philosophical symbols, worn smooth from centuries of use. It is strewn with maps, scrolls, and ancient instruments, serving as the hub for Athena and Hermes' strategic planning.",
+        "stainedGlass01": "Tall arched stained glass windows line the walls of the library, depicting scenes of wisdom and strategy. The panes are intricately detailed with images of owls in flight, olive branches, and Athena in moments of contemplation. The colorful light that filters through them casts a serene and contemplative atmosphere across the room.",
+        "astrolabe01": "Resting on the oak table, a bronze astrolabe catches the light, its ancient design symbolizing the combination of intellect and practical knowledge. Used for astronomical measurements and navigation, it underscores the focus on precision and strategy that Athena embodies."
+      }
+    }
+  },
+
+  "bathhouseAphrodite01": {
+    "name": "The Bath House of Aphrodite",
+    "entities": [
+      "aphrodite01",
+      "ares01",
+      "pool01",
+      "lounge01",
+      "fountain01"
+    ],
+
+"boundaries": [{
+      "ConnectedEnvironmentID": "throneRoom01",
+      "TransitionCondition": "Through the east door"
+    }],
+
+    "state": {
+      "OverallState": "The Bath House of Aphrodite is a haven of luxury and sensuality, filled with the soft glow of candlelight and the gentle scent of rose petals. The room is dominated by a large shimmering pool at its center, surrounded by plush lounges draped in silks and velvets. The air is warm and misty, creating an intimate atmosphere where secrets and passions can be shared away from prying eyes.",
+
+      "EntitySpecificStates": {
+        "aphrodite01": "Aphrodite, adorned in a flowing gown of soft ivory, her golden hair cascading over her shoulders, reclines gracefully on a plush lounge near the edge of the shimmering pool. Her blue eyes are fixed on Ares with a subtle knowing smile as she slowly rolls a pomegranate seed between her fingers. 'And who will mend the hearts that break in the process?' she teases, her voice a soft murmur laced with both affection and mischief.",
+        "ares01": "Ares, dressed in dark iron armor, his helmet set aside on a nearby table, moves stealthily across the warm mist-filled room towards Aphrodite. His piercing red eyes remain fixed on her as he reaches her side, his demeanor relaxed yet charged with barely contained passion. 'Let them tear each other apart,' he murmurs, his voice low and smooth. 'The spoils will be ours Aphrodite.'",
+        "pool01": "At the center of the bathhouse, a large oval-shaped pool shimmers with a soft otherworldly glow. The crystal-clear water is infused with rose petals, their fragrance gently perfuming the air. The warm mist rising from the pool mingles with the candlelight, creating an ethereal and intimate atmosphere.",
+        "lounge01": "Near the pool, a plush deep-cushioned lounge draped in silks and velvets of soft pinks, creams, and golds invites relaxation. Aphrodite reclines gracefully here, the luxurious fabrics enhancing the sense of indulgence and intimacy that permeates the bathhouse.",
+        "fountain01": "A nearby fountain shaped like a reclining nymph gently trickles water into a small basin. The soothing sound of the water adds to the tranquil atmosphere, complementing the warm mist and soft candlelight that fill the room."
+      }
+    }
+  },
+
+  "hearthHestia01": {
+    "name": "The Hearth of Hestia",
+    "entities": [
+      "hestia01",
+      "hearth01",
+      "altar01"
+    ],
+
+"boundaries": [{
+      "ConnectedEnvironmentID": "throneRoom01",
+      "TransitionCondition": "Through the south-west door"
+    }],
+
+    "state": {
+      "OverallState": "The Hearth of Hestia is a sanctuary of warmth and peace within Mount Olympus, centered around the eternal flame. The room is circular with smooth white marble walls that glow softly in the light of the central hearth. The atmosphere is one of calm and nurturing, where anyone can find solace and comfort. Simple yet meaningful decorations reflect the goddess's role as the keeper of the hearth and home.",
+      "EntitySpecificStates": {
+        "hestia01": "Hestia, dressed in simple yet elegant white robes, stands beside the central hearth, her warm brown eyes reflecting the steady flames. She tends to the fire with quiet devotion, her presence calm and serene. A soft, serene smile plays on her lips as she whispers a blessing for the hearth and those who gather around it: 'May the flame of home and hearth bring peace and comfort to all who seek it.'",
+        "hearth01": "The central hearth is a large round structure made of polished bronze, with steady flames burning within. The light from the hearth casts a golden glow across the room, creating an atmosphere of warmth and comfort. The flames are eternal, symbolizing the everlasting nature of home and family under Hestia's watchful care.",
+        "altar01": "A small stone altar is dedicated to offerings, adorned with bowls filled with grains, fruits, and small loaves of bread. A bundle of herbs burns gently on the altar, sending up a soft, fragrant smoke that fills the room with the soothing scent of sage and lavender. The altar represents abundance and the nurturing presence of Hestia in the lives of gods and mortals alike."
+      }
+    }
+  },
+
+  "forgeOfHephaestus01": {
+    "name": "The Forge of Hephaestus",
+    "entities": [
+      "anvil01",
+      "furnace01",
+      "hammerRack01"
+    ],
+
+"boundaries": [{
+      "ConnectedEnvironmentID": "throneRoom01",
+      "TransitionCondition": "Through the south-west door"
+    }],
+
+    "state": {
+      "OverallState": "The Forge of Hephaestus is a vast, cavernous space filled with the sounds of hammers striking metal and the roar of furnaces. The walls are made of dark volcanic rock, and the floor is covered in soot and metal shavings. The air is thick with the smell of molten metal and the heat from the roaring fires, creating an intense atmosphere of creation and craftsmanship.",
+      "EntitySpecificStates": {
+        "anvil01": "A massive blackened anvil stands in the center of the forge, its surface worn smooth from centuries of use. The anvil is covered in deep grooves and nicks, a testament to the countless weapons and artifacts forged upon it.",
+        "furnace01": "A large stone furnace dominates one side of the room, the flames within burning a bright, intense orange. The furnace is fed by a continuous stream of coal and wood, with bellows on either side to stoke the fire to unimaginable temperatures.",
+        "hammerRack01": "Against one wall, a rack holds a variety of hammers, each one designed for a specific purpose. The hammers range in size from small, delicate tools for fine work to massive sledgehammers used for shaping large pieces of metal."
+      }
+    }
+  },
+
+  "huntinggroundsArtemis01": {
+    "name": "The Hunting Grounds of Artemis",
+    "entities": [
+      "artemis01",
+      "apollo01",
+      "statue01",
+      "altar02",
+      "spring01"
+    ],
+    "boundaries": [{
+      "ConnectedEnvironmentID": "gardenOfDemeter01",
+      "TransitionCondition": "To the east"
+    }],
+    "state": {
+      "OverallState": "The Hunting Grounds of Artemis is a sprawling forest filled with ancient trees, dense underbrush, and hidden glades. The air is crisp and cool, filled with the sounds of rustling leaves, distant animal calls, and the occasional snap of a twig underfoot. The atmosphere is one of wild beauty and serene solitude, a perfect place for the goddess of the hunt to roam. The light filtering through the dense canopy creates a patchwork of sun and shadow, enhancing the sense of mystery and adventure.",
+
+      "EntitySpecificStates": {
+        "artemis01": "Artemis, the goddess of the hunt, stands at the edge of the spring, her keen eyes scanning the surrounding forest. Clad in a silver tunic, she is the embodiment of grace and strength. Her bow, always at the ready, is slung across her back, and her quiver is filled with arrows fletched from the feathers of sacred birds. The cool breeze ruffles her hair, and the sounds of the forest seem to move in harmony with her every breath.",
+        "apollo01": "Apollo, the god of the sun and prophecy, stands beside his sister near the spring, his golden lyre slung over his shoulder. His presence brings warmth to the cool forest, the light of the sun seeming to follow him wherever he goes. He is dressed in white robes with gold accents, and his expression is one of both calm and intensity, reflecting his dual nature as a god of both reason and passion. His eyes, like his sister's, are sharp and observant, taking in every detail of their surroundings.",
+        "statue01": "At the entrance to the hunting grounds, a life-sized marble statue of Artemis stands, her bow drawn and ready to release an arrow. The statue is intricately detailed, capturing the goddess in a moment of intense focus. The stone surface is smooth, but it seems to radiate the strength and determination of the goddess it represents.",
+        "altar02": "Deep within the forest, a small stone altar is nestled in a secluded glade. The altar is covered with offerings of fruits, flowers, and animal bones, left by hunters seeking Artemis's favor. The altar is worn by time, its surface etched with ancient symbols of the hunt, and it exudes a sense of reverence and respect for the goddess.",
+        "spring01": "A clear, sparkling spring bubbles up from the ground near the center of the hunting grounds. The water is cool and refreshing, said to be blessed by the goddess herself. Surrounding the spring are large flat stones, perfect for resting after a long hunt. The sound of the gently flowing water adds to the tranquility of the forest, making this a place of both renewal and reflection."
+    }
+  }
+},
+
+  "armoryAres01": {
+    "name": "The Armory of Ares",
+    "entities": [
+      "weaponRack01",
+      "armorStand01",
+      "battleMap01"
+    ],
+
+"boundaries": [{
+      "ConnectedEnvironmentID": "throneRoom01",
+      "TransitionCondition": "Through the east door"
+    }],
+
+    "state": {
+      "OverallState": "The Armory of Ares is a stark, imposing room filled with racks of weapons and suits of armor. The walls are lined with cold gray stone, and the floor is paved with black flagstones. The air is thick with the scent of leather, metal, and oil, creating an atmosphere of readiness and power, where the tools of war are always within reach.",
+
+      "EntitySpecificStates": {
+        "weaponRack01": "A large weapon rack dominates one wall, filled with an array of swords, spears, and shields. Each weapon is meticulously crafted and maintained, ready for use in battle at a moment's notice.",
+        "armorStand01": "In the center of the room, several armor stands hold suits of armor made from various materials—bronze, iron, and even gold. Each set is intricately designed, reflecting the brutal efficiency and power of Ares.",
+        "battleMap01": "A large wooden table in one corner of the armory holds a detailed battle map. The map is covered in miniature figures representing armies and fortifications, with red and black markers indicating potential battle plans."
+      }
+    }
+  },
+
+  "gardenOfDemeter01": {
+    "name": "The Garden of Demeter",
+    "entities": [
+      "cornucopia01",
+      "statue02",
+      "well01"
+    ],
+
+"boundaries": [{
+      "ConnectedEnvironmentID": "huntinggroundsArtemis01",
+      "TransitionCondition": "To the west"
+    },
+    {
+      "ConnectedEnvironmentID": "throneRoom01",
+      "TransitionCondition": "Through the north entrance"
+    }],
+
+    "state": {
+      "OverallState": "The Garden of Demeter is a lush, vibrant space filled with an abundance of plants, flowers, and crops. The air is warm and fragrant, alive with the buzzing of bees and the gentle rustle of leaves in the breeze. The atmosphere is one of peace and fertility, a testament to Demeter's nurturing power, where life thrives under her watchful care.",
+      "EntitySpecificStates": {
+        "cornucopia01": "At the heart of the garden, a large cornucopia rests on a stone pedestal. Overflowing with fruits, vegetables, and grains, the cornucopia symbolizes the abundance and fertility that Demeter brings to the earth.",
+        "statue02": "A stone statue of Demeter stands among the rows of crops, her arms outstretched as if blessing the garden. The statue is surrounded by a bed of colorful flowers, adding to the overall sense of peace and harmony in the garden.",
+        "well01": "Near the entrance to the garden, an old stone well provides fresh water for the plants. The well is adorned with vines and flowers, and a simple wooden bucket hangs from a rope, ready to draw water for the garden."
+      }
+    }
+  },
+
+  "hermesQuarters01": {
+    "name": "Hermes' Quarters",
+    "entities": [
+      "scrollRack01",
+      "wingedSandals01",
+      "caduceus01"
+    ],
+
+"boundaries": [{
+      "ConnectedEnvironmentID": "throneRoom01",
+      "TransitionCondition": "Through the north-west door"
+    }],
+
+    "state": {
+      "OverallState": "Hermes' Quarters is a small, cleverly designed space filled with items reflecting the god's roles as a messenger and trickster. The walls are lined with shelves holding scrolls, maps, and various artifacts collected from his travels. The room is dimly lit, with a soft glow emanating from a few strategically placed lanterns, creating an atmosphere of quiet contemplation and subtle mischief.",
+
+      "EntitySpecificStates": {
+        "scrollRack01": "A tall wooden rack filled with scrolls and maps stands against one wall. The scrolls are meticulously organized, each one marked with symbols indicating its origin and importance.",
+        "wingedSandals01": "A pair of winged sandals rest on a low pedestal near the bed. The sandals are crafted from fine leather and adorned with small, delicate wings. They are said to allow the wearer to travel at incredible speeds.",
+        "caduceus01": "Hanging on the wall above a small writing desk is Hermes' caduceus, a staff entwined with two serpents. The caduceus is a symbol of Hermes' role as a messenger and healer, and it radiates a subtle, calming energy."
+      }
+    }
+  }
+}
+

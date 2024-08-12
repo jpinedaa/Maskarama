@@ -1,0 +1,52 @@
+Objective: Update an entity's state based on new inputs while merging them with existing information, considering that two minutes have passed since the last update. These are general instructions applicable to any entity within the simulation. Athena is provided as an example.
+
+General Instructions
+
+Current State Recap
+Reiterate the current state of the entity based on the previous description.
+Entity: [EntityName]
+State:
+"[Detailed description of the current state of the entity]"
+New Inputs
+Describe the new sensory inputs that update the entity’s current state. Highlight changes in the environment and interactions.
+New Inputs:
+"[Detailed description of new sensory inputs relevant to the entity]"
+
+Updating the State
+Explain how these new inputs will integrate with the existing state, considering their relevance to the entity's physical and sensory attributes and the context that two minutes have passed.
+Update Process:
+"[Explanation of how the new inputs enhance and integrate with the existing state, reflecting the changes and observations made in the two minutes since the last state update]"
+
+Updated State
+Provide the updated state of the entity based on the integration of new inputs.
+Updated State:
+"[Detailed description of the updated state of the entity]"
+
+Importance of Entity State
+Emphasize the significance of maintaining an accurate and detailed entity state within the simulation.
+Importance of Entity State:
+"[Explanation of the importance of the entity state in maintaining narrative depth, consistency, and impact within the simulation]"
+
+
+Example: Athena
+
+Current State Recap
+Entity: Athena
+State:
+"Athena presents a divine, impeccable form, characterized by her statuesque and formidable presence. She stands approximately 6 feet tall, clad in perfectly fitted, detailed bronze armor that shows no signs of wear. Her physical condition is peak, immune to fatigue, aging, or deterioration, and unaffected by typical human sensations like hunger or discomfort."
+
+New Inputs
+New Inputs:
+"She hears a noise coming from the direction of the door. Her eyes are observing Artemis's face closely. She feels the weight of her bronze armor and the texture of the spear handle in her hand. The temperature under her armor increases, causing a noticeable change in thermal comfort."
+
+Updating the State
+Update Process:
+The new inputs enhance Athena’s existing state by adding layers of sensory perception and physical awareness. The noise from the door heightens her alertness, signaling potential changes in her environment. Her focused observation of Artemis indicates her active engagement in their ongoing debate. The physical sensations of her armor and spear, combined with the increased temperature, enrich her sensory experience without compromising her divine form. These updates reflect the changes and observations made in the two minutes since the last state update.
+
+Updated State
+Updated State:
+"Athena stands firm in the Palace Court, her divine stature unwavering. She hears a noise from the direction of the door, her senses instantly heightened, ready to respond to any potential threat. Her eyes remain fixed on Artemis, scrutinizing every expression and movement during their debate. The weight of her bronze armor and the reassuring texture of the spear handle in her grip ground her presence. The rising temperature under her armor adds to her awareness of the environment, yet her physical form remains unaffected, maintaining peak divine condition."
+
+Importance of Entity State
+Importance of Entity State:
+Athena’s updated state captures her dynamic interaction with the environment and other characters, enhancing the narrative depth of the simulation. It underscores her role as a central figure, embodying both physical prowess and divine perception. By maintaining a detailed and accurate state, Athena's presence and actions remain consistent and impactful within the simulation, contributing to the richness of the narrative experience.
